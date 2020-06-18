@@ -98,6 +98,13 @@ object CrashyReporter {
     @Throws(CrashyNotInitializedException::class)
     fun getLogsAsStrings() = dumpFolder.listFiles()?.map { it.readText() }
 
+  /**
+     * You can use this for manually dumping log
+     * @throws CrashyNotInitializedException see [NOT_REGISTERED_MESSAGE]
+     */
+    @Throws(CrashyNotInitializedException::class)
+    fun getLots() = dumpFolder.listFiles()?.toList()
+
 
     //endregion
 
