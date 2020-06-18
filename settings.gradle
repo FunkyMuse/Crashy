@@ -1,0 +1,3 @@
+include ':crashyreporter'
+include ':app'
+rootProject.name = "Crashy"
