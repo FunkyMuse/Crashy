@@ -1,10 +1,10 @@
 package com.crazylegend.crashyreporter
 
 import android.content.Context
-import android.util.Log
-import com.crazylegend.crashyreporter.exceptions.CrashyExceptionHandler
-import com.crazylegend.crashyreporter.exceptions.CrashyNotInitializedException
+import com.crazylegend.crashyreporter.handlers.CrashyExceptionHandler
+import com.crazylegend.crashyreporter.handlers.CrashyNotInitializedException
 import com.crazylegend.crashyreporter.utils.DeviceUtils
+import com.crazylegend.crashyreporter.utils.ThreadUtil
 import com.crazylegend.crashyreporter.utils.ThreadUtil.getThreadInfo
 import java.io.File
 import java.io.PrintWriter
@@ -35,7 +35,8 @@ object CrashyReporter {
      * android:authorities="${applicationId}.androidx-startup"
      * android:exported="false"
      * tools:node="merge">
-     * <meta-data  android:name="com.crazylegend.crashyreporter.initializer.CrashyInitializer"
+     * <meta-data
+     * android:name="com.crazylegend.crashyreporter.initializer.CrashyInitializer"
      * android:value="androidx.startup" />
      *  </provider>
      */
@@ -46,7 +47,8 @@ object CrashyReporter {
                     "     android:authorities=\"$ {applicationId}.androidx-startup\"\n" +
                     "     android:exported=\"false\"\n" +
                     "     tools:node=\"merge\">\n" +
-                    "     <meta-data  android:name=\"com.crazylegend.crashyreporter.initializer.CrashyInitializer\"\n" +
+                    "     <meta-data  " +
+                    "     android:name=\"com.crazylegend.crashyreporter.initializer.CrashyInitializer\"\n" +
                     "     android:value=\"androidx.startup\" />\n" +
                     "     </provider>"
 
@@ -62,8 +64,9 @@ object CrashyReporter {
 
 
     /**
+     * Deletes all the logs inside the [dumpFolder]
      * @throws CrashyNotInitializedException see [NOT_REGISTERED_MESSAGE]
-     * @return Boolean whether delition was success
+     * @return Boolean whether deletion was a success
      */
     @Throws(CrashyNotInitializedException::class)
     fun purgeLogs() = dumpFolder.deleteRecursively()
@@ -81,29 +84,45 @@ object CrashyReporter {
     }
 
     /**
-     * You can use this for manually dumping log
+     * You can use this for manually dumping log it takes an [Exception] and uses [Thread.currentThread] as the thread of error
      * @throws CrashyNotInitializedException see [NOT_REGISTERED_MESSAGE]
      * @param exception Exception
      */
     @Throws(CrashyNotInitializedException::class)
-    fun logException(exception: Exception) {
+    fun logException(exception: Throwable) {
         setupHandlerAndDumpFolder()
         buildLog(Thread.currentThread(), exception)
     }
 
     /**
-     * You can use this for manually dumping log
+     * Get all dumps as [List] of [String]
      * @throws CrashyNotInitializedException see [NOT_REGISTERED_MESSAGE]
      */
     @Throws(CrashyNotInitializedException::class)
     fun getLogsAsStrings() = dumpFolder.listFiles()?.map { it.readText() }
 
-  /**
-     * You can use this for manually dumping log
+    /**
+     * Get all dumps as [List] of [File]
      * @throws CrashyNotInitializedException see [NOT_REGISTERED_MESSAGE]
      */
     @Throws(CrashyNotInitializedException::class)
-    fun getLots() = dumpFolder.listFiles()?.toList()
+    fun getLogFiles() = dumpFolder.listFiles()?.toList()
+
+
+    /**
+     * Get all dumps as [List] of [String]
+     * @throws CrashyNotInitializedException see [NOT_REGISTERED_MESSAGE]
+     */
+    @Throws(CrashyNotInitializedException::class)
+    fun getLogsAsStringsAndPurge() =
+            dumpFolder.listFiles()?.map { it.readText() }.also { purgeLogs() }
+
+    /**
+     * Get all dumps as [List] of [File]
+     * @throws CrashyNotInitializedException see [NOT_REGISTERED_MESSAGE]
+     */
+    @Throws(CrashyNotInitializedException::class)
+    fun getLogFilesAndPurge() = dumpFolder.listFiles()?.toList().also { purgeLogs() }
 
 
     //endregion
@@ -120,43 +139,23 @@ object CrashyReporter {
         }
     }
 
-    private fun buildLog(thread: Thread, throwable: Throwable) {
-        val stackTrace = getStackTrace(throwable)
-        val threadInfo = getThreadInfo(thread)
-        saveLog(stackTrace, threadInfo)
-    }
+    private fun buildLog(thread: Thread, throwable: Throwable) = saveLog(getStackTrace(throwable), getThreadInfo(thread))
 
     private fun setupHandlerAndDumpFolder() {
         setupExceptionHandler()
         if (!dumpFolder.exists()) dumpFolder.mkdirs()
     }
 
-    private fun getStackTrace(throwable: Throwable): String {
-        val stringWriter = StringWriter()
-        val printWriter = PrintWriter(stringWriter)
-        printWriter.use {
-            throwable.printStackTrace(it)
-        }
-        return stringWriter.toString()
-    }
+    private fun getStackTrace(throwable: Throwable) =
+            with(StringWriter()) {
+                PrintWriter(this).also { printWriter -> printWriter.use { writer -> throwable.printStackTrace(writer) } }
+                toString()
+            }
 
 
     private fun saveLog(stackTrace: String, threadName: String) {
         val pathToWriteTo = File("$pathToDump/$crashLogTime.txt")
-        pathToWriteTo.writeText(buildStackTraceString(stackTrace) + "\n" + threadName + "\n" + DeviceUtils.getDeviceDetails(applicationContext))
-        dumpFolder.listFiles()?.forEach {
-            val text = it.readText()
-            Log.d("FILE PATH", it.path)
-            Log.d("DEBUGGER", text)
-        }
+        pathToWriteTo.writeText(ThreadUtil.buildStackTraceString(stackTrace) + "\n" + threadName + "\n" + DeviceUtils.getDeviceDetails(applicationContext))
     }
-
-    private fun buildStackTraceString(stackTrace: String) =
-            "----------- Stacktrace -----------\n" +
-                    "\n" +
-                    "$stackTrace\n" +
-                    "\n" +
-                    "----------- END of Stacktrace -----------\n"
-
     //endregion
 }

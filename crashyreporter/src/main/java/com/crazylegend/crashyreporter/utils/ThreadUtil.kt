@@ -17,5 +17,13 @@ internal object ThreadUtil {
                     "Thread group parent: ${thread.threadGroup?.parent?.name}\n" +
                     "Thread group active count: ${thread.threadGroup?.activeCount()}\n" +
                     "\n" +
-                    "----------- END of Thread info -----------\n"
+                    "----------- END of thread info -----------\n"
+
+
+    fun buildStackTraceString(stackTrace: String) =
+            "----------- Stacktrace -----------\n" +
+                    "\n" +
+                    "$stackTrace\n" +
+                    "\n" +
+                    "----------- END of stacktrace -----------\n"
 }

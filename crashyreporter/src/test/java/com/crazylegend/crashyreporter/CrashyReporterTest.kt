@@ -6,8 +6,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.CoreMatchers.`is`
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertThat
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -67,5 +66,16 @@ class CrashyReporterTest{
             assert(first)
         }
     }
+
+    @Test
+    fun getContentAndPurge(){
+        forceCrash_and_check_if_inserted()
+        val list = CrashyReporter.getLogsAsStringsAndPurge()
+        assertNotNull(list)
+        val condition = !list.isNullOrEmpty()
+        assert(condition)
+    }
+
+
 
 }

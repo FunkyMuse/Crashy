@@ -12,9 +12,6 @@ internal class CrashyInitializer : Initializer<CrashyInitializer.CrashyToken> {
 
     object CrashyToken
 
-    override fun create(context: Context) = with(CrashyReporter.initialize(context)){
-        CrashyToken
-    }
-
+    override fun create(context: Context) = with(CrashyReporter.initialize(context)){ CrashyToken }
     override fun dependencies(): MutableList<Class<out Initializer<*>>>  = mutableListOf()
 }
