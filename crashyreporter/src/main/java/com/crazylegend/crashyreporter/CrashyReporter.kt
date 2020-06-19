@@ -114,8 +114,7 @@ object CrashyReporter {
      * @throws CrashyNotInitializedException see [NOT_REGISTERED_MESSAGE]
      */
     @Throws(CrashyNotInitializedException::class)
-    fun getLogsAsStringsAndPurge() =
-            dumpFolder.listFiles()?.map { it.readText() }.also { purgeLogs() }
+    fun getLogsAsStringsAndPurge() = dumpFolder.listFiles()?.map { it.readText() }.also { purgeLogs() }
 
     /**
      * Get all dumps as [List] of [File]
