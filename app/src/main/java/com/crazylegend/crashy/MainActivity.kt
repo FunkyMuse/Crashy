@@ -1,7 +1,9 @@
 package com.crazylegend.crashy
 
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import android.util.Log
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.crazylegend.crashyreporter.CrashyReporter
 
@@ -13,6 +15,10 @@ class MainActivity : AppCompatActivity() {
 
         CrashyReporter.getLogsAsStrings()?.asSequence()?.forEach {
             Log.d("CRASHY", "WITH CRASH REASON: \n")
+            findViewById<TextView>(R.id.test).apply {
+                text = it
+                movementMethod = ScrollingMovementMethod()
+            }
             println(it)
         }
 

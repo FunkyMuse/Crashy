@@ -54,7 +54,9 @@ internal object DeviceUtils {
                     "User IDs: ${getUserPlayIDs(context)}\n" +
                     "Build partition name system: ${Build.Partition.PARTITION_NAME_SYSTEM}\n" +
                     "\n" +
-                    "----------- END of Device info -----------"
+                    "----------- END of Device info -----------" +
+                    "\n" +
+                    "\n"
 
 
 
