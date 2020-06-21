@@ -98,7 +98,12 @@ internal object DeviceUtils {
     }
 
     private fun getDeviceID(context: Context): String? = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
-    private fun getAppVersion(context: Context) = context.packageManager.getPackageInfo(context.packageName, 0).longVersionCode
+    private fun getAppVersion(context: Context) = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        context.packageManager.getPackageInfo(context.packageName, 0).longVersionCode
+    } else {
+        context.packageManager.getPackageInfo(context.packageName, 0).versionCode.toLong()
+    }
+
     private fun getLaunchedFromApp(context: Context): String? {
         val packageName: String?
         val localPackageManager = context.packageManager
