@@ -46,8 +46,9 @@ dependencies {
 
 
 ## Screens of how the stack trace info looks like
-<img src="https://raw.githubusercontent.com/CraZyLegenD/Crashy/master/screens/screen_1.png" width="45%"></img>
-<img src="https://raw.githubusercontent.com/CraZyLegenD/Crashy/master/screens/screen_2.png" width="45%"></img>
+<img src="https://raw.githubusercontent.com/CraZyLegenD/Crashy/master/screens/screen_1.png" width="33%"></img>
+<img src="https://raw.githubusercontent.com/CraZyLegenD/Crashy/master/screens/screen_2.png" width="33%"></img>
+<img src="https://raw.githubusercontent.com/CraZyLegenD/Crashy/master/screens/screen_3.png" width="33%"></img>
 
 5. How to use?
  
