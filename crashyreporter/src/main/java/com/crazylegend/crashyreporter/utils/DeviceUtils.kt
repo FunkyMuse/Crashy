@@ -10,6 +10,11 @@ import android.os.Build
 import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import com.crazylegend.crashyreporter.CrashyReporter
+import com.crazylegend.crashyreporter.extensions.*
+import com.crazylegend.crashyreporter.extensions.isIgnoringBatteryOptimization
+import com.crazylegend.crashyreporter.extensions.isInInteractiveState
+import com.crazylegend.crashyreporter.extensions.isInPowerSaveMode
+import com.crazylegend.crashyreporter.extensions.isSustainedPerformanceModeSupported
 import java.util.*
 
 
@@ -18,7 +23,7 @@ import java.util.*
  */
 internal object DeviceUtils {
 
-    internal data class FingerprintPartition(val name: String, val fingerprint: String, val buildTimeMillis: Long)
+
 
     fun getDeviceDetails(context: Context) =
             "----------- Device info -----------\n" +
@@ -34,9 +39,9 @@ internal object DeviceUtils {
                     "Board: ${Build.BOARD}\n" +
                     "Bootloader: ${Build.BOOTLOADER}\n" +
                     "Brand: ${Build.BRAND}\n" +
-                    "CPU_ABIS_32: ${Build.SUPPORTED_32_BIT_ABIS.map { it }}\n" +
-                    "CPU_ABIS_64: ${Build.SUPPORTED_64_BIT_ABIS.map { it }}\n" +
-                    "Supported ABIS: ${Build.SUPPORTED_ABIS.map { it }}\n" +
+                    "CPU_ABIS_32: ${Build.SUPPORTED_32_BIT_ABIS.map { it }.notAvailableIfNull()}\n" +
+                    "CPU_ABIS_64: ${Build.SUPPORTED_64_BIT_ABIS.map { it }.notAvailableIfNull()}\n" +
+                    "Supported ABIS: ${Build.SUPPORTED_ABIS.map { it }.notAvailableIfNull()}\n" +
                     "Device: ${Build.DEVICE}\n" +
                     "Display: ${Build.DISPLAY}\n" +
                     "Fingerprint: ${Build.FINGERPRINT}\n" +
@@ -51,12 +56,21 @@ internal object DeviceUtils {
                     "Radio: ${getRadioVersion()}\n" +
                     "Tags: ${Build.TAGS}\n" +
                     "User: ${Build.USER}\n" +
-                    "User IDs: ${getUserPlayIDs(context)}\n" +
-                    "Build partition name system: ${Build.Partition.PARTITION_NAME_SYSTEM}\n" +
+                    "User IDs: ${getUserPlayIDs(context).notAvailableIfNull()}\n" +
+                    "Is sustained performance mode supported: ${context.isSustainedPerformanceModeSupported}\n" +
+                    "Is in power save mode: ${context.isInPowerSaveMode}\n" +
+                    "Is in interactive state: ${context.isInInteractiveState}\n" +
+                    "Is ignoring battery optimizations: ${context.isIgnoringBatteryOptimization}\n" +
+                    "Thermal status: ${context.getThermalStatus}\n" +
+                    "Location power save mode: ${context.locationPowerSaveMode}\n" +
+                    "Is device idle: ${context.isDeviceIdle}\n" +
                     "\n" +
                     "----------- END of Device info -----------" +
                     "\n" +
-                    "\n"
+                    "\n" +
+                    "*********** Exit reasons ***********\n" +
+                    "${context.getExitReasons(maxRes = 3).notAvailableIfNullNewLine().replace("[", "").replace("]", "").replace(",", "\n")}\n" +
+                    "*********** END of exit reasons ***********"
 
 
 

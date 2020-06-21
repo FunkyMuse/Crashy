@@ -1,6 +1,12 @@
 package com.crazylegend.crashyreporter
 
 import android.content.Context
+import android.util.Log
+import com.crazylegend.crashyreporter.extensions.*
+import com.crazylegend.crashyreporter.extensions.getExitReasons
+import com.crazylegend.crashyreporter.extensions.getThermalStatus
+import com.crazylegend.crashyreporter.extensions.isInPowerSaveMode
+import com.crazylegend.crashyreporter.extensions.isSustainedPerformanceModeSupported
 import com.crazylegend.crashyreporter.handlers.CrashyExceptionHandler
 import com.crazylegend.crashyreporter.handlers.CrashyNotInitializedException
 import com.crazylegend.crashyreporter.utils.DeviceUtils
@@ -60,6 +66,17 @@ object CrashyReporter {
      */
     fun initialize(context: Context) {
         applicationContext = context
+
+        Log.d("THERMAL", context.getThermalStatus.toString())
+        context.getExitReasons(0, Int.MAX_VALUE).forEach {
+            Log.d("EXIT REASON", it.toString())
+        }
+        Log.d("SUSTAINED PERFORMANCE", context.isSustainedPerformanceModeSupported.toString())
+        Log.d("isInPowerSaveMode", context.isInPowerSaveMode.toString())
+        Log.d("isInInteractiveState", context.isInInteractiveState.toString())
+        Log.d("IgnoringBatteryOptimiz", context.isIgnoringBatteryOptimization.toString())
+        Log.d("locationPowerSaveMode", context.locationPowerSaveMode.toString())
+        Log.d("isDeviceIdle", context.isDeviceIdle.toString())
     }
 
 

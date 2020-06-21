@@ -7,7 +7,7 @@ package com.crazylegend.crashyreporter.utils
 internal object ThreadUtil {
 
     fun getThreadInfo(thread: Thread) =
-            "----------- Thread info -----------\n" +
+            "``````````` Thread info ```````````\n" +
                     "\n" +
                     "Name: ${thread.name}\n" +
                     "ID: ${thread.id}\n" +
@@ -17,7 +17,7 @@ internal object ThreadUtil {
                     "Thread group parent: ${thread.threadGroup?.parent?.name}\n" +
                     "Thread group active count: ${thread.threadGroup?.activeCount()}\n" +
                     "\n" +
-                    "----------- END of thread info -----------\n"
+                    "``````````` END of thread info ```````````\n"
 
 
     fun buildStackTraceString(stackTrace: String) =
