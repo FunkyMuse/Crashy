@@ -133,7 +133,7 @@ internal fun Context.getExitReasons(pid: Int = 0, maxRes: Int = 1) =
                         "\n" +
                         "Description: ${it.description}\n" +
                         "Importance: ${buildImportance(it.importance)}\n" +
-                        "Importance: ${buildExitReason(it.reason)}\n" +
+                        "Reason: ${buildExitReason(it.reason)}\n" +
                         "Timestamp: ${CrashyReporter.dateFormat.format(Date(it.timestamp))}\n" +
                         "\n" +
                         "~~~~~~~~~~~ END of exit reason #${index+1} ~~~~~~~~~~~" +
