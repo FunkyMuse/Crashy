@@ -7,7 +7,6 @@ import android.content.Context
 import android.os.Build
 import android.os.PowerManager
 import android.os.PowerManager.*
-import androidx.annotation.RequiresApi
 import com.crazylegend.crashyreporter.CrashyReporter
 import java.util.*
 
@@ -63,18 +62,21 @@ private fun Boolean?.booleanAsYesOrNo() =
  *  THERMAL_STATUS_MODERATE, THERMAL_STATUS_SEVERE, THERMAL_STATUS_CRITICAL, THERMAL_STATUS_EMERGENCY, or THERMAL_STATUS_SHUTDOWN
  */
 internal val Context.getThermalStatus: String
-    @RequiresApi(Build.VERSION_CODES.Q)
     get() {
-        return when (powerManager?.currentThermalStatus) {
-            THERMAL_STATUS_NONE -> "STATUS_NONE"
-            THERMAL_STATUS_LIGHT -> "STATUS_LIGHT"
-            THERMAL_STATUS_MODERATE -> "STATUS_MODERATE"
-            THERMAL_STATUS_SEVERE -> "STATUS_SEVERE"
-            THERMAL_STATUS_CRITICAL -> "STATUS_CRITICAL"
-            THERMAL_STATUS_EMERGENCY -> "STATUS_EMERGENCY"
-            THERMAL_STATUS_SHUTDOWN -> "STATUS_SHUTDOWN"
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            when (powerManager?.currentThermalStatus) {
+                THERMAL_STATUS_NONE -> "STATUS_NONE"
+                THERMAL_STATUS_LIGHT -> "STATUS_LIGHT"
+                THERMAL_STATUS_MODERATE -> "STATUS_MODERATE"
+                THERMAL_STATUS_SEVERE -> "STATUS_SEVERE"
+                THERMAL_STATUS_CRITICAL -> "STATUS_CRITICAL"
+                THERMAL_STATUS_EMERGENCY -> "STATUS_EMERGENCY"
+                THERMAL_STATUS_SHUTDOWN -> "STATUS_SHUTDOWN"
 
-            else -> notAvailableString
+                else -> notAvailableString
+            }
+        } else {
+            notAvailableString
         }
     }
 
