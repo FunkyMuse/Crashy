@@ -11,10 +11,6 @@ import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import com.crazylegend.crashyreporter.CrashyReporter
 import com.crazylegend.crashyreporter.extensions.*
-import com.crazylegend.crashyreporter.extensions.isIgnoringBatteryOptimization
-import com.crazylegend.crashyreporter.extensions.isInInteractiveState
-import com.crazylegend.crashyreporter.extensions.isInPowerSaveMode
-import com.crazylegend.crashyreporter.extensions.isSustainedPerformanceModeSupported
 import java.util.*
 
 
@@ -70,7 +66,9 @@ internal object DeviceUtils {
                     "\n" +
                     "*********** Exit reasons ***********\n" +
                     "${context.getExitReasons(maxRes = 3).notAvailableIfNullNewLine().replace("[", "").replace("]", "").replace(",", "\n")}\n" +
-                    "*********** END of exit reasons ***********"
+                    "*********** END of exit reasons ***********" +
+                    "\n" +
+                    "\n"
 
 
 
@@ -118,5 +116,13 @@ internal object DeviceUtils {
         }
         return packageName
     }
+
+    fun getRunningProcesses(context: Context) =
+            "^^^^^^^^^^^ Currently running foreground/background processes ^^^^^^^^^^^\n" +
+                    "\n" +
+                    "${context.getRunningProcesses()}\n" +
+                    "\n" +
+                    "^^^^^^^^^^^ END of running foreground/background processes info ^^^^^^^^^^^"
+
 
 }

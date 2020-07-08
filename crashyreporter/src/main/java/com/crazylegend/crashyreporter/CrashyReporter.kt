@@ -154,7 +154,9 @@ object CrashyReporter {
 
     private fun saveLog(stackTrace: String, threadName: String) {
         val pathToWriteTo = File("$pathToDump/$crashLogTime.txt")
-        pathToWriteTo.writeText(ThreadUtil.buildStackTraceString(stackTrace) + "\n" + threadName + "\n" + DeviceUtils.getDeviceDetails(applicationContext))
+        pathToWriteTo.writeText(ThreadUtil.buildStackTraceString(stackTrace) + "\n" +
+                threadName + "\n" + DeviceUtils.getDeviceDetails(applicationContext) + "\n" +
+                DeviceUtils.getRunningProcesses(applicationContext))
     }
     //endregion
 }

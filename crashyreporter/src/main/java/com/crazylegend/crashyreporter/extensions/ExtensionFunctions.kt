@@ -15,12 +15,6 @@ import java.util.*
  * Created by crazy on 6/21/20 to long live and prosper !
  */
 
-internal data class AppDeathInfo(
-        val description: String?,
-        val importance: String,
-        val reason: String,
-        val timestamp: String
-)
 
 private inline val Context.powerManager
     get() = getSystemService(Context.POWER_SERVICE) as PowerManager?
@@ -49,11 +43,11 @@ internal val Context.isIgnoringBatteryOptimization
     }
 
 private fun Boolean?.booleanAsYesOrNo() =
-        when (this) {
-            true -> "Yes"
-            false -> "No"
-            null -> notAvailableString
-        }
+    when (this) {
+        true -> "Yes"
+        false -> "No"
+        null -> notAvailableString
+    }
 
 
 /**
@@ -129,39 +123,56 @@ private fun buildExitReason(reason: Int) = when (reason) {
 }
 
 internal fun Context.getExitReasons(pid: Int = 0, maxRes: Int = 1) =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            activityManager.getHistoricalProcessExitReasons(packageName, pid, maxRes).mapIndexed { index, it ->
-                "~~~~~~~~~~~ Exit reason #${index+1} ~~~~~~~~~~~\n" +
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        activityManager.getHistoricalProcessExitReasons(packageName, pid, maxRes)
+            .mapIndexed { index, it ->
+                "~~~~~~~~~~~ Exit reason #${index + 1} ~~~~~~~~~~~\n" +
                         "\n" +
                         "Description: ${it.description}\n" +
                         "Importance: ${buildImportance(it.importance)}\n" +
                         "Reason: ${buildExitReason(it.reason)}\n" +
                         "Timestamp: ${CrashyReporter.dateFormat.format(Date(it.timestamp))}\n" +
                         "\n" +
-                        "~~~~~~~~~~~ END of exit reason #${index+1} ~~~~~~~~~~~" +
+                        "~~~~~~~~~~~ END of exit reason #${index + 1} ~~~~~~~~~~~" +
                         "\n" +
                         "\n"
             }
-        } else {
-            emptyList()
-        }
+    } else {
+        emptyList()
+    }
 
-fun buildImportance(importance: Int): String {
-    return when(importance){
-        IMPORTANCE_FOREGROUND-> "FOREGROUND"
-        IMPORTANCE_FOREGROUND_SERVICE-> "FOREGROUND_SERVICE"
-        IMPORTANCE_TOP_SLEEPING-> "TOP_SLEEPING"
-        IMPORTANCE_VISIBLE-> "VISIBLE"
-        IMPORTANCE_PERCEPTIBLE-> "PERCEPTIBLE"
-        IMPORTANCE_CANT_SAVE_STATE-> "CANT_SAVE_STATE"
-        IMPORTANCE_SERVICE-> "SERVICE"
-        IMPORTANCE_CACHED-> "CACHED"
+internal inline fun <T> tryOrNull(block: () -> T): T? = try {
+    block()
+} catch (e: Exception) {
+    null
+}
+
+internal fun Context.getRunningProcesses() =
+    tryOrNull {
+        activityManager.getRunningServices(Integer.MAX_VALUE).map {
+            it.service.className
+        }
+    }.notAvailableIfNullNewLine().replace("[", "").replace("]", "").replace(",", "\n")
+
+internal fun buildImportance(importance: Int): String {
+    return when (importance) {
+        IMPORTANCE_FOREGROUND -> "FOREGROUND"
+        IMPORTANCE_FOREGROUND_SERVICE -> "FOREGROUND_SERVICE"
+        IMPORTANCE_TOP_SLEEPING -> "TOP_SLEEPING"
+        IMPORTANCE_VISIBLE -> "VISIBLE"
+        IMPORTANCE_PERCEPTIBLE -> "PERCEPTIBLE"
+        IMPORTANCE_CANT_SAVE_STATE -> "CANT_SAVE_STATE"
+        IMPORTANCE_SERVICE -> "SERVICE"
+        IMPORTANCE_CACHED -> "CACHED"
         IMPORTANCE_GONE -> "GONE"
-        else-> notAvailableString
+        else -> notAvailableString
     }
 }
 
 internal const val notAvailableString = "N/A"
 
-internal fun <T> Collection<T>?.notAvailableIfNullNewLine(): String = if (this.isNullOrEmpty()) "N/A" else "\n${this}"
-internal fun <T> Collection<T>?.notAvailableIfNull(): String = if (this.isNullOrEmpty()) "N/A" else "$this"
+internal fun <T> Collection<T>?.notAvailableIfNullNewLine(): String =
+    if (this.isNullOrEmpty()) "N/A" else "\n${this}"
+
+internal fun <T> Collection<T>?.notAvailableIfNull(): String =
+    if (this.isNullOrEmpty()) "N/A" else "$this"
