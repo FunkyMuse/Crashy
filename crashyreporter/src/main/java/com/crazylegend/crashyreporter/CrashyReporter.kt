@@ -114,15 +114,36 @@ object CrashyReporter {
      * @throws CrashyNotInitializedException see [NOT_REGISTERED_MESSAGE]
      */
     @Throws(CrashyNotInitializedException::class)
-    fun getLogsAsStringsAndPurge() = dumpFolder.listFiles()?.map { it.readText() }.also { purgeLogs() }
+    inline fun getLogsAsStringsAndPurge(purgeResult: (Boolean) -> Unit = {}) = dumpFolder.listFiles()?.map { it.readText() }.also { purgeResult(purgeLogs()) }
 
     /**
      * Get all dumps as [List] of [File]
      * @throws CrashyNotInitializedException see [NOT_REGISTERED_MESSAGE]
      */
     @Throws(CrashyNotInitializedException::class)
-    fun getLogFilesAndPurge() = dumpFolder.listFiles()?.toList().also { purgeLogs() }
+    inline fun getLogFilesAndPurge(purgeResult: (Boolean) -> Unit = {}) = dumpFolder.listFiles()?.toList().also { purgeResult(purgeLogs()) }
 
+
+    /**
+     * Get all dumps as [List] of [String]
+     * @throws CrashyNotInitializedException see [NOT_REGISTERED_MESSAGE]
+     */
+    @Throws(CrashyNotInitializedException::class)
+    inline fun getLogsAsStringsActionBeforePurge(purgeResult: (Boolean) -> Unit = {}, onStringsAction: (List<String>?) -> Unit) =
+            dumpFolder.listFiles()?.map { it.readText() }.also {
+                onStringsAction(it)
+                purgeResult(purgeLogs())
+            }
+
+    /**
+     * Get all dumps as [List] of [File]
+     * @throws CrashyNotInitializedException see [NOT_REGISTERED_MESSAGE]
+     */
+    @Throws(CrashyNotInitializedException::class)
+    inline fun getLogFilesActionBeforePurge(purgeResult: (Boolean) -> Unit = {}, onFilesAction: (List<File>?) -> Unit) = dumpFolder.listFiles()?.toList().also {
+        onFilesAction(it)
+        purgeResult(purgeLogs())
+    }
 
     //endregion
 

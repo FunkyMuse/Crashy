@@ -1,12 +1,16 @@
+@file:Suppress("DEPRECATION")
+
 package com.crazylegend.crashyreporter.extensions
 
 import android.app.ActivityManager
 import android.app.ActivityManager.RunningAppProcessInfo.*
 import android.app.ApplicationExitInfo.*
 import android.content.Context
+import android.os.BatteryManager
 import android.os.Build
 import android.os.PowerManager
 import android.os.PowerManager.*
+import androidx.annotation.RequiresApi
 import com.crazylegend.crashyreporter.CrashyReporter
 import java.util.*
 
@@ -15,6 +19,25 @@ import java.util.*
  * Created by crazy on 6/21/20 to long live and prosper !
  */
 
+private inline val Context.batteryManager
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    get() = getSystemService(Context.BATTERY_SERVICE) as BatteryManager
+
+
+internal val Context.getBatteryPercentage get() = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
+internal val Context.isBatteryCharging
+    get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        batteryManager.isCharging
+    } else {
+        null
+    }
+
+internal val Context.getChargeTimeRemaining
+    get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        batteryManager.computeChargeTimeRemaining()
+    } else {
+        null
+    }
 
 private inline val Context.powerManager
     get() = getSystemService(Context.POWER_SERVICE) as PowerManager?
@@ -24,30 +47,30 @@ private inline val Context.activityManager: ActivityManager
 
 internal val Context.isSustainedPerformanceModeSupported
     get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        powerManager?.isSustainedPerformanceModeSupported.booleanAsYesOrNo()
+        powerManager?.isSustainedPerformanceModeSupported.asYesOrNo()
     } else {
         notAvailableString
     }
 
 internal val Context.isInPowerSaveMode
-    get() = powerManager?.isPowerSaveMode.booleanAsYesOrNo()
+    get() = powerManager?.isPowerSaveMode.asYesOrNo()
 
 internal val Context.isInInteractiveState
-    get() = powerManager?.isInteractive.booleanAsYesOrNo()
+    get() = powerManager?.isInteractive.asYesOrNo()
 
 internal val Context.isIgnoringBatteryOptimization
     get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        powerManager?.isIgnoringBatteryOptimizations(packageName).booleanAsYesOrNo()
+        powerManager?.isIgnoringBatteryOptimizations(packageName).asYesOrNo()
     } else {
         notAvailableString
     }
 
-private fun Boolean?.booleanAsYesOrNo() =
-    when (this) {
-        true -> "Yes"
-        false -> "No"
-        null -> notAvailableString
-    }
+internal fun Boolean?.asYesOrNo() =
+        when (this) {
+            true -> "Yes"
+            false -> "No"
+            null -> notAvailableString
+        }
 
 
 /**
@@ -98,7 +121,7 @@ internal val Context.locationPowerSaveMode: String
 
 internal val Context.isDeviceIdle
     get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        powerManager?.isDeviceIdleMode.booleanAsYesOrNo()
+        powerManager?.isDeviceIdleMode.asYesOrNo()
     } else {
         notAvailableString
     }
@@ -123,23 +146,23 @@ private fun buildExitReason(reason: Int) = when (reason) {
 }
 
 internal fun Context.getExitReasons(pid: Int = 0, maxRes: Int = 1) =
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        activityManager.getHistoricalProcessExitReasons(packageName, pid, maxRes)
-            .mapIndexed { index, it ->
-                "~~~~~~~~~~~ Exit reason #${index + 1} ~~~~~~~~~~~\n" +
-                        "\n" +
-                        "Description: ${it.description}\n" +
-                        "Importance: ${buildImportance(it.importance)}\n" +
-                        "Reason: ${buildExitReason(it.reason)}\n" +
-                        "Timestamp: ${CrashyReporter.dateFormat.format(Date(it.timestamp))}\n" +
-                        "\n" +
-                        "~~~~~~~~~~~ END of exit reason #${index + 1} ~~~~~~~~~~~" +
-                        "\n" +
-                        "\n"
-            }
-    } else {
-        emptyList()
-    }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            activityManager.getHistoricalProcessExitReasons(packageName, pid, maxRes)
+                    .mapIndexed { index, it ->
+                        "~~~~~~~~~~~ Exit reason #${index + 1} ~~~~~~~~~~~\n" +
+                                "\n" +
+                                "Description: ${it.description}\n" +
+                                "Importance: ${buildImportance(it.importance)}\n" +
+                                "Reason: ${buildExitReason(it.reason)}\n" +
+                                "Timestamp: ${CrashyReporter.dateFormat.format(Date(it.timestamp))}\n" +
+                                "\n" +
+                                "~~~~~~~~~~~ END of exit reason #${index + 1} ~~~~~~~~~~~" +
+                                "\n" +
+                                "\n"
+                    }
+        } else {
+            emptyList()
+        }
 
 internal inline fun <T> tryOrNull(block: () -> T): T? = try {
     block()
@@ -148,11 +171,11 @@ internal inline fun <T> tryOrNull(block: () -> T): T? = try {
 }
 
 internal fun Context.getRunningProcesses() =
-    tryOrNull {
-        activityManager.getRunningServices(Integer.MAX_VALUE).map {
-            it.service.className
-        }
-    }.notAvailableIfNullNewLine().replace("[", "").replace("]", "").replace(",", "\n")
+        tryOrNull {
+            activityManager.getRunningServices(Integer.MAX_VALUE).map {
+                it.service.className
+            }
+        }.notAvailableIfNullNewLine().replace("[", "").replace("]", "").replace(",", "\n")
 
 internal fun buildImportance(importance: Int): String {
     return when (importance) {
@@ -171,8 +194,62 @@ internal fun buildImportance(importance: Int): String {
 
 internal const val notAvailableString = "N/A"
 
+internal fun String?.notAvailableIfNull() = if (this.isNullOrEmpty()) notAvailableString else this
+
 internal fun <T> Collection<T>?.notAvailableIfNullNewLine(): String =
-    if (this.isNullOrEmpty()) "N/A" else "\n${this}"
+        if (this.isNullOrEmpty()) "N/A" else "\n${this}"
 
 internal fun <T> Collection<T>?.notAvailableIfNull(): String =
-    if (this.isNullOrEmpty()) "N/A" else "$this"
+        if (this.isNullOrEmpty()) "N/A" else "$this"
+
+
+internal val Context.actualPackageName: String?
+    get() = applicationContext.javaClass.`package`?.name
+
+internal val Context.flavor: String?
+    get() = getBuildConfigValue(actualPackageName, "FLAVOR") as String?
+
+internal val Context.appName: String?
+    get() {
+        val applicationInfo = applicationContext.applicationInfo
+        val stringId = applicationInfo.labelRes
+        return if (stringId == 0) {
+            applicationInfo.nonLocalizedLabel.toString()
+        } else {
+            applicationContext.getString(stringId)
+        }
+    }
+
+internal fun Context.getVersionName(): String = packageManager.getPackageInfo(packageName, 0).versionName
+
+
+internal fun Context.getVersionCodeCompat(): Long = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+    packageManager.getPackageInfo(packageName, 0).longVersionCode
+} else {
+    @Suppress("DEPRECATION")
+    packageManager.getPackageInfo(packageName, 0).versionCode.toLong()
+}
+
+/**
+ * Gets a field from the project's BuildConfig. This is useful when, for example, flavors
+ * are used at the project level to set custom fields.
+ * @param fieldName The name of the field-to-access
+ * @return The value of the field, or `null` if the field is not found.
+ */
+private fun getBuildConfigValue(packageName: String?, fieldName: String): Any? {
+    val buildConfigClassName = "$packageName.BuildConfig"
+    return try {
+        val clazz = Class.forName(buildConfigClassName)
+        val field = clazz.getField(fieldName)
+        field.get(null)
+    } catch (e: ClassNotFoundException) {
+        null
+    } catch (e: NoSuchFieldException) {
+        null
+    } catch (e: IllegalAccessException) {
+        null
+    }
+}
+
+internal val Context.shortAppName: String?
+    get() = actualPackageName?.substringAfterLast('.')

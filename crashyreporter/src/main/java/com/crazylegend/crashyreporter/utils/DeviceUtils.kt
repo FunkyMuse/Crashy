@@ -20,64 +20,98 @@ import java.util.*
 internal object DeviceUtils {
 
 
+    fun getDeviceDetails(context: Context): String {
 
-    fun getDeviceDetails(context: Context) =
-            "----------- Device info -----------\n" +
-                    "\n" +
-                    "Device ID: ${getDeviceID(context)}\n" +
-                    "Application version: ${getAppVersion(context)}\n" +
-                    "Default launcher: ${getLaunchedFromApp(context)}\n" +
-                    "Timezone name: ${TimeZone.getDefault().displayName}\n" +
-                    "Timezone ID: ${TimeZone.getDefault().id}\n" +
-                    "Version release: ${Build.VERSION.RELEASE}\n" +
-                    "Version incremental : ${Build.VERSION.INCREMENTAL}\n" +
-                    "Version SDK: ${Build.VERSION.SDK_INT}\n" +
-                    "Board: ${Build.BOARD}\n" +
-                    "Bootloader: ${Build.BOOTLOADER}\n" +
-                    "Brand: ${Build.BRAND}\n" +
-                    "CPU_ABIS_32: ${Build.SUPPORTED_32_BIT_ABIS.map { it }.notAvailableIfNull()}\n" +
-                    "CPU_ABIS_64: ${Build.SUPPORTED_64_BIT_ABIS.map { it }.notAvailableIfNull()}\n" +
-                    "Supported ABIS: ${Build.SUPPORTED_ABIS.map { it }.notAvailableIfNull()}\n" +
-                    "Device: ${Build.DEVICE}\n" +
-                    "Display: ${Build.DISPLAY}\n" +
-                    "Fingerprint: ${Build.FINGERPRINT}\n" +
-                    "Hardware: ${Build.HARDWARE}\n" +
-                    "Host: ${Build.HOST}\n" +
-                    "ID: ${Build.ID}\n" +
-                    "Manufacturer: ${Build.MANUFACTURER}\n" +
-                    "Product: ${Build.PRODUCT}\n" +
-                    "Build time: ${Build.TIME}\n" +
-                    "Build time formatted: ${CrashyReporter.dateFormat.format(Date(Build.TIME))}\n" +
-                    "Type: ${Build.TYPE}\n" +
-                    "Radio: ${getRadioVersion()}\n" +
-                    "Tags: ${Build.TAGS}\n" +
-                    "User: ${Build.USER}\n" +
-                    "User IDs: ${getUserPlayIDs(context).notAvailableIfNull()}\n" +
-                    "Is sustained performance mode supported: ${context.isSustainedPerformanceModeSupported}\n" +
-                    "Is in power save mode: ${context.isInPowerSaveMode}\n" +
-                    "Is in interactive state: ${context.isInInteractiveState}\n" +
-                    "Is ignoring battery optimizations: ${context.isIgnoringBatteryOptimization}\n" +
-                    "Thermal status: ${context.getThermalStatus}\n" +
-                    "Location power save mode: ${context.locationPowerSaveMode}\n" +
-                    "Is device idle: ${context.isDeviceIdle}\n" +
-                    "\n" +
-                    "----------- END of Device info -----------" +
-                    "\n" +
-                    "\n" +
-                    "*********** Exit reasons ***********\n" +
-                    "${context.getExitReasons(maxRes = 3).notAvailableIfNullNewLine().replace("[", "").replace("]", "").replace(",", "\n")}\n" +
-                    "*********** END of exit reasons ***********" +
-                    "\n" +
-                    "\n"
+        val chargeRemainingTime = context.getChargeTimeRemaining
+        val chargeRemainingTimeString = if (chargeRemainingTime != null) {
+            if (chargeRemainingTime == -1L) {
+                notAvailableString
+            } else {
+                CrashyReporter.dateFormat.format(Date(chargeRemainingTime)).notAvailableIfNull()
+            }
+        } else {
+            notAvailableString
+        }
+
+        return "----------- Device info -----------\n" +
+                "\n" +
+                "Device ID: ${getDeviceID(context)}\n" +
+                "Application version: ${getAppVersion(context)}\n" +
+                "Default launcher: ${getLaunchedFromApp(context)}\n" +
+                "Timezone name: ${TimeZone.getDefault().displayName}\n" +
+                "Timezone ID: ${TimeZone.getDefault().id}\n" +
+                "Version release: ${Build.VERSION.RELEASE}\n" +
+                "Version incremental : ${Build.VERSION.INCREMENTAL}\n" +
+                "Version SDK: ${Build.VERSION.SDK_INT}\n" +
+                "Board: ${Build.BOARD}\n" +
+                "Bootloader: ${Build.BOOTLOADER}\n" +
+                "Brand: ${Build.BRAND}\n" +
+                "CPU_ABIS_32: ${Build.SUPPORTED_32_BIT_ABIS.map { it }.notAvailableIfNull()}\n" +
+                "CPU_ABIS_64: ${Build.SUPPORTED_64_BIT_ABIS.map { it }.notAvailableIfNull()}\n" +
+                "Supported ABIS: ${Build.SUPPORTED_ABIS.map { it }.notAvailableIfNull()}\n" +
+                "Device: ${Build.DEVICE}\n" +
+                "Display: ${Build.DISPLAY}\n" +
+                "Fingerprint: ${Build.FINGERPRINT}\n" +
+                "Hardware: ${Build.HARDWARE}\n" +
+                "Host: ${Build.HOST}\n" +
+                "ID: ${Build.ID}\n" +
+                "Manufacturer: ${Build.MANUFACTURER}\n" +
+                "Product: ${Build.PRODUCT}\n" +
+                "Build time: ${Build.TIME}\n" +
+                "Build time formatted: ${CrashyReporter.dateFormat.format(Date(Build.TIME))}\n" +
+                "Type: ${Build.TYPE}\n" +
+                "Radio: ${getRadioVersion()}\n" +
+                "Tags: ${Build.TAGS}\n" +
+                "User: ${Build.USER}\n" +
+                "User IDs: ${getUserPlayIDs(context).notAvailableIfNull()}\n" +
+                "Is sustained performance mode supported: ${context.isSustainedPerformanceModeSupported}\n" +
+                "Is in power save mode: ${context.isInPowerSaveMode}\n" +
+                "Is in interactive state: ${context.isInInteractiveState}\n" +
+                "Is ignoring battery optimizations: ${context.isIgnoringBatteryOptimization}\n" +
+                "Thermal status: ${context.getThermalStatus}\n" +
+                "Location power save mode: ${context.locationPowerSaveMode}\n" +
+                "Is device idle: ${context.isDeviceIdle}\n" +
+                "Battery percentage: ${context.getBatteryPercentage}\n" +
+                "Battery remaining time: ${chargeRemainingTimeString}\n" +
+                "Is battery charging: ${context.isBatteryCharging.asYesOrNo()}\n" +
+                "\n" +
+                "----------- END of Device info -----------" +
+                "\n" +
+                "\n" +
+                appendExitReasons(context) +
+                "\n" +
+                "\n" +
+                appendApplicationInfo(context)
+    }
+
+    private fun appendApplicationInfo(context: Context): String {
+        return "*********** Application info ***********\n" +
+                "\n" +
+                "App name: ${context.appName.notAvailableIfNull()}\n" +
+                "Version code: ${context.getVersionCodeCompat()}\n" +
+                "Version name: ${context.getVersionName().notAvailableIfNull()}\n" +
+                "Package name: ${context.applicationInfo.packageName.notAvailableIfNull()}\n" +
+                "Short package name: ${context.shortAppName.notAvailableIfNull()}\n" +
+                "Flavor: ${context.flavor.notAvailableIfNull()}\n" +
+                "\n" +
+                "*********** END of Application info ***********" +
+                "\n" +
+                "\n"
+    }
 
 
+    private fun appendExitReasons(context: Context): String {
+        return "*********** Exit reasons ***********\n" +
+                "${context.getExitReasons(maxRes = 3).notAvailableIfNullNewLine().replace("[", "").replace("]", "").replace(",", "\n")}\n" +
+                "*********** END of exit reasons ***********"
+    }
 
 
     @SuppressLint("MissingPermission")
     private fun getUserPlayIDs(context: Context): List<String?> {
         return if (ActivityCompat.checkSelfPermission(context, Manifest.permission.GET_ACCOUNTS) == PackageManager.PERMISSION_GRANTED) {
             (context.getSystemService(Context.ACCOUNT_SERVICE) as AccountManager).accounts.map {
-                if (it.type.equals("com.google", true)){
+                if (it.type.equals("com.google", true)) {
                     it.name
                 } else {
                     null
@@ -91,7 +125,7 @@ internal object DeviceUtils {
 
     private fun getRadioVersion() = try {
         Build.getRadioVersion()
-    } catch (e:java.lang.Exception){
+    } catch (e: java.lang.Exception) {
         null
     }
 
