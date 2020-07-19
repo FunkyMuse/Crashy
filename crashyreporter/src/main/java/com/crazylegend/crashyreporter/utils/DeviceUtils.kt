@@ -64,6 +64,12 @@ internal object DeviceUtils {
                 "Battery remaining time: ${getChargeRemainingTime(context)}\n" +
                 "Is battery charging: ${context.isBatteryCharging.asYesOrNo()}\n" +
                 "Is device rooted: ${RootUtils.isDeviceRooted.asYesOrNo()}\n" +
+                "CPU Model: ${RuntimeInfo.getCPUModel().notAvailableIfNull()}\n" +
+                "CPU max frequency: ${RuntimeInfo.getCPUMaxFrequency().notAvailableIfNull()}\n" +
+                "# of CPU cores: ${RuntimeInfo.getNumberOfCores()}\n" +
+                "Up time: ${RuntimeInfo.getUpTime().notAvailableIfNull()}\n" +
+                "Kernel version: ${RuntimeInfo.getLinuxKernelVersion().notAvailableIfNull()}\n" +
+                "Hardware manufacturers info: ${RuntimeInfo.getHardwareInfo().notAvailableIfNull()}\n" +
                 "\n" +
                 "----------- END of Device info -----------" +
                 "\n" +
@@ -138,6 +144,8 @@ internal object DeviceUtils {
         }
         return packageName
     }
+
+
 
     fun getRunningProcesses(context: Context) =
             "^^^^^^^^^^^ Currently running foreground/background processes ^^^^^^^^^^^\n" +
