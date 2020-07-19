@@ -6,8 +6,6 @@ import android.app.ActivityManager
 import android.app.ActivityManager.RunningAppProcessInfo.*
 import android.app.ApplicationExitInfo.*
 import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.content.pm.Signature
 import android.os.BatteryManager
@@ -178,6 +176,13 @@ internal inline fun <T> tryOrNull(block: () -> T): T? = try {
     null
 }
 
+internal inline fun <T> tryOrIgnore(block: () -> T) {
+    try {
+        block()
+    } catch (e: Exception) {
+    }
+}
+
 internal fun Context.getRunningProcesses() =
         tryOrNull {
             activityManager.getRunningServices(Integer.MAX_VALUE).map {
@@ -288,11 +293,7 @@ private val Context.currentSignatures: Array<String>
         signatures.forEach { signature ->
             val messageDigest = MessageDigest.getInstance("SHA")
             messageDigest.update(signature.toByteArray())
-            try {
-                actualSignatures.add(
-                        encodeToString(messageDigest.digest(), DEFAULT).trim())
-            } catch (e: Exception) {
-            }
+            tryOrIgnore { actualSignatures.add(encodeToString(messageDigest.digest(), DEFAULT).trim()) }
         }
         return actualSignatures.filter { it.isNotEmpty() && it.isNotBlank() }.toTypedArray()
     }
