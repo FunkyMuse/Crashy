@@ -1,5 +1,6 @@
 # Crashy
-### A small Android library to collect crash reports and save them to storage
+### A small Android library written entirely in Kotlin to collect crash reports and save them to storage.
+**Doesn't work with Java projects**.
 
 [![](https://jitpack.io/v/CraZyLegenD/Crashy.svg)](https://jitpack.io/#CraZyLegenD/Crashy)
  [![Kotlin](https://img.shields.io/badge/Kotlin-1.3.72-blue.svg)](https://kotlinlang.org) [![Platform](https://img.shields.io/badge/Platform-Android-green.svg)](https://developer.android.com/guide/) 
