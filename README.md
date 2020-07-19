@@ -43,16 +43,7 @@ dependencies {
         jvmTarget = "1.8"
     }
 ```
-
-
-## Screens of how the stack trace info looks like
-<img src="https://raw.githubusercontent.com/CraZyLegenD/Crashy/master/screens/screen_1.png" width="33%"></img>
-<img src="https://raw.githubusercontent.com/CraZyLegenD/Crashy/master/screens/screen_2.png" width="33%"></img>
-<img src="https://raw.githubusercontent.com/CraZyLegenD/Crashy/master/screens/screen_3.png" width="33%"></img>
-
-5. How to use?
- 
-Inside your AndroidManifest.xml file
+4. Inside your AndroidManifest.xml file
 ```xml
  <provider
    android:name="androidx.startup.InitializationProvider"
@@ -64,6 +55,14 @@ Inside your AndroidManifest.xml file
           android:value="androidx.startup" />
 </provider>
 ```
+
+## Screens of how the stack trace info looks like
+<img src="https://raw.githubusercontent.com/CraZyLegenD/Crashy/master/screens/screen_1.png" width="33%"></img>
+<img src="https://raw.githubusercontent.com/CraZyLegenD/Crashy/master/screens/screen_2.png" width="33%"></img>
+<img src="https://raw.githubusercontent.com/CraZyLegenD/Crashy/master/screens/screen_3.png" width="33%"></img>
+
+5. How to use?
+
 Get logs
 ```kotlin
 //as a list of strings
