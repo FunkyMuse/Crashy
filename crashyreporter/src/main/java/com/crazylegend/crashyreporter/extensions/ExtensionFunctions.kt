@@ -6,12 +6,19 @@ import android.app.ActivityManager
 import android.app.ActivityManager.RunningAppProcessInfo.*
 import android.app.ApplicationExitInfo.*
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.content.pm.PackageManager
+import android.content.pm.Signature
 import android.os.BatteryManager
 import android.os.Build
 import android.os.PowerManager
 import android.os.PowerManager.*
+import android.util.Base64.DEFAULT
+import android.util.Base64.encodeToString
 import androidx.annotation.RequiresApi
 import com.crazylegend.crashyreporter.CrashyReporter
+import java.security.MessageDigest
 import java.util.*
 
 
@@ -25,6 +32,7 @@ private inline val Context.batteryManager
 
 
 internal val Context.getBatteryPercentage get() = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
+
 internal val Context.isBatteryCharging
     get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         batteryManager.isCharging
@@ -253,3 +261,40 @@ private fun getBuildConfigValue(packageName: String?, fieldName: String): Any? {
 
 internal val Context.shortAppName: String?
     get() = actualPackageName?.substringAfterLast('.')
+
+
+val Context.apkSignatures
+    get() = currentSignatures.toList()
+
+@Suppress("DEPRECATION", "RemoveExplicitTypeArguments")
+private val Context.currentSignatures: Array<String>
+    get() {
+        val actualSignatures = ArrayList<String>()
+        val signatures = try {
+            val packageInfo =
+                    packageManager.getPackageInfo(
+                            packageName,
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+                                PackageManager.GET_SIGNING_CERTIFICATES
+                            else PackageManager.GET_SIGNATURES)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                if (packageInfo.signingInfo.hasMultipleSigners())
+                    packageInfo.signingInfo.apkContentsSigners
+                else packageInfo.signingInfo.signingCertificateHistory
+            } else packageInfo.signatures
+        } catch (e: Exception) {
+            emptyArray<Signature>()
+        }
+        signatures.forEach { signature ->
+            val messageDigest = MessageDigest.getInstance("SHA")
+            messageDigest.update(signature.toByteArray())
+            try {
+                actualSignatures.add(
+                        encodeToString(messageDigest.digest(), DEFAULT).trim())
+            } catch (e: Exception) {
+            }
+        }
+        return actualSignatures.filter { it.isNotEmpty() && it.isNotBlank() }.toTypedArray()
+    }
+
+

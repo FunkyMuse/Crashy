@@ -4,8 +4,8 @@ import android.content.Context
 import com.crazylegend.crashyreporter.handlers.CrashyExceptionHandler
 import com.crazylegend.crashyreporter.handlers.CrashyNotInitializedException
 import com.crazylegend.crashyreporter.utils.DeviceUtils
-import com.crazylegend.crashyreporter.utils.ThreadUtil
-import com.crazylegend.crashyreporter.utils.ThreadUtil.getThreadInfo
+import com.crazylegend.crashyreporter.utils.ThreadUtils
+import com.crazylegend.crashyreporter.utils.ThreadUtils.getThreadInfo
 import java.io.File
 import java.io.PrintWriter
 import java.io.StringWriter
@@ -175,7 +175,7 @@ object CrashyReporter {
 
     private fun saveLog(stackTrace: String, threadName: String) {
         val pathToWriteTo = File("$pathToDump/$crashLogTime.txt")
-        pathToWriteTo.writeText(ThreadUtil.buildStackTraceString(stackTrace) + "\n" +
+        pathToWriteTo.writeText(ThreadUtils.buildStackTraceString(stackTrace) + "\n" +
                 threadName + "\n" + DeviceUtils.getDeviceDetails(applicationContext) + "\n" +
                 DeviceUtils.getRunningProcesses(applicationContext))
     }

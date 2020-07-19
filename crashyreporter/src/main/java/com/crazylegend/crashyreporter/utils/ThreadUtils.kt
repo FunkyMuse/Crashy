@@ -4,7 +4,7 @@ package com.crazylegend.crashyreporter.utils
 /**
  * Created by crazy on 6/18/20 to long live and prosper !
  */
-internal object ThreadUtil {
+internal object ThreadUtils {
 
     fun getThreadInfo(thread: Thread) =
             "``````````` Thread info ```````````\n" +

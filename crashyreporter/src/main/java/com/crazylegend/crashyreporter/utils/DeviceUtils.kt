@@ -11,6 +11,7 @@ import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import com.crazylegend.crashyreporter.CrashyReporter
 import com.crazylegend.crashyreporter.extensions.*
+import com.crazylegend.crashyreporter.utils.ApplicationUtils.appendApplicationInfo
 import java.util.*
 
 
@@ -19,19 +20,7 @@ import java.util.*
  */
 internal object DeviceUtils {
 
-
     fun getDeviceDetails(context: Context): String {
-
-        val chargeRemainingTime = context.getChargeTimeRemaining
-        val chargeRemainingTimeString = if (chargeRemainingTime != null) {
-            if (chargeRemainingTime == -1L) {
-                notAvailableString
-            } else {
-                CrashyReporter.dateFormat.format(Date(chargeRemainingTime)).notAvailableIfNull()
-            }
-        } else {
-            notAvailableString
-        }
 
         return "----------- Device info -----------\n" +
                 "\n" +
@@ -72,8 +61,9 @@ internal object DeviceUtils {
                 "Location power save mode: ${context.locationPowerSaveMode}\n" +
                 "Is device idle: ${context.isDeviceIdle}\n" +
                 "Battery percentage: ${context.getBatteryPercentage}\n" +
-                "Battery remaining time: ${chargeRemainingTimeString}\n" +
+                "Battery remaining time: ${getChargeRemainingTime(context)}\n" +
                 "Is battery charging: ${context.isBatteryCharging.asYesOrNo()}\n" +
+                "Is device rooted: ${RootUtils.isDeviceRooted.asYesOrNo()}\n" +
                 "\n" +
                 "----------- END of Device info -----------" +
                 "\n" +
@@ -84,26 +74,24 @@ internal object DeviceUtils {
                 appendApplicationInfo(context)
     }
 
-    private fun appendApplicationInfo(context: Context): String {
-        return "*********** Application info ***********\n" +
-                "\n" +
-                "App name: ${context.appName.notAvailableIfNull()}\n" +
-                "Version code: ${context.getVersionCodeCompat()}\n" +
-                "Version name: ${context.getVersionName().notAvailableIfNull()}\n" +
-                "Package name: ${context.applicationInfo.packageName.notAvailableIfNull()}\n" +
-                "Short package name: ${context.shortAppName.notAvailableIfNull()}\n" +
-                "Flavor: ${context.flavor.notAvailableIfNull()}\n" +
-                "\n" +
-                "*********** END of Application info ***********" +
-                "\n" +
-                "\n"
+    private fun getChargeRemainingTime(context: Context): String {
+        val chargeRemainingTime = context.getChargeTimeRemaining
+        return if (chargeRemainingTime != null) {
+            if (chargeRemainingTime == -1L) {
+                notAvailableString
+            } else {
+                CrashyReporter.dateFormat.format(Date(chargeRemainingTime)).notAvailableIfNull()
+            }
+        } else {
+            notAvailableString
+        }
     }
 
 
     private fun appendExitReasons(context: Context): String {
-        return "*********** Exit reasons ***********\n" +
+        return "########### Exit reasons ###########\n" +
                 "${context.getExitReasons(maxRes = 3).notAvailableIfNullNewLine().replace("[", "").replace("]", "").replace(",", "\n")}\n" +
-                "*********** END of exit reasons ***********"
+                "########### END of exit reasons ###########"
     }
 
 
@@ -160,3 +148,6 @@ internal object DeviceUtils {
 
 
 }
+
+
+
