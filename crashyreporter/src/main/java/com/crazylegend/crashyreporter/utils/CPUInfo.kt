@@ -12,7 +12,13 @@ object CPUInfo {
 
     fun getNumberOfCores() = Runtime.getRuntime().availableProcessors()
 
-    fun getCPUModel() = getProcessText("cpuinfo")?.substringAfter("Hardware\t: ")?.trim()
+    fun getCPUModel(): String? {
+        val processorInfoDump = getProcessText("cpuinfo") ?: return null
+        return if (processorInfoDump.contains("Hardware\t: "))
+            getProcessText("cpuinfo")?.substringAfter("Hardware\t: ")?.trim()
+        else
+            null
+    }
 
     private fun getProcessText(procFolder: String): String? {
         val process = Runtime.getRuntime().exec("cat /proc/$procFolder")

@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
+import android.os.SystemClock
 import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import com.crazylegend.crashyreporter.CrashyReporter
@@ -23,6 +24,8 @@ internal object DeviceUtils {
     fun getDeviceDetails(context: Context): String {
 
         return "----------- Device info -----------\n" +
+                "\n" +
+                "Report ID: ${UUID.randomUUID()}" +
                 "\n" +
                 "Device ID: ${getDeviceID(context)}\n" +
                 "Application version: ${getAppVersion(context)}\n" +
@@ -66,6 +69,8 @@ internal object DeviceUtils {
                 "Is device rooted: ${RootUtils.isDeviceRooted.asYesOrNo()}\n" +
                 "CPU Model: ${CPUInfo.getCPUModel().notAvailableIfNull()}\n" +
                 "# of CPU cores: ${CPUInfo.getNumberOfCores()}\n" +
+                "Up time with sleep: ${upTimeWithSleep()}\n" +
+                "Up time without sleep: ${upTimeWithoutSleep()}\n" +
                 "\n" +
                 "----------- END of Device info -----------" +
                 "\n" +
@@ -112,6 +117,8 @@ internal object DeviceUtils {
         }
     }
 
+    private fun upTimeWithSleep() = formatMillisToHoursMinutesSeconds(SystemClock.elapsedRealtime())
+    private fun upTimeWithoutSleep() = formatMillisToHoursMinutesSeconds(SystemClock.uptimeMillis())
 
     private fun getRadioVersion() = try {
         Build.getRadioVersion()

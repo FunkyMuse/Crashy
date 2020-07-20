@@ -20,6 +20,7 @@ object ApplicationUtils {
                 "Short package name: ${context.shortAppName.notAvailableIfNull()}\n" +
                 "Flavor: ${context.flavor.notAvailableIfNull()}\n" +
                 "Signatures: ${context.apkSignatures.notAvailableIfNull()}\n" +
+                "Default prefs: ${SharedPreferencesUtil.collect(context).notAvailableIfNull()}\n" +
                 "\n" +
                 "*********** END of Application info ***********" +
                 "\n" +

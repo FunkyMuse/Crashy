@@ -1,5 +1,8 @@
 package com.crazylegend.crashyreporter.utils
 
+import android.os.SystemClock
+import com.crazylegend.crashyreporter.extensions.formatMillisToHoursMinutesSeconds
+
 
 /**
  * Created by crazy on 6/18/20 to long live and prosper !
@@ -16,6 +19,7 @@ internal object ThreadUtils {
                     "Thread group name: ${thread.threadGroup?.name}\n" +
                     "Thread group parent: ${thread.threadGroup?.parent?.name}\n" +
                     "Thread group active count: ${thread.threadGroup?.activeCount()}\n" +
+                    "Thread time: ${formatMillisToHoursMinutesSeconds(SystemClock.currentThreadTimeMillis())}\n" +
                     "\n" +
                     "``````````` END of thread info ```````````\n"
 

@@ -3,11 +3,14 @@ package com.crazylegend.crashy
 import android.app.ActivityManager
 import android.content.Context
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import com.crazylegend.crashyreporter.CrashyReporter
+import com.crazylegend.crashyreporter.utils.SharedPreferencesUtil
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,6 +18,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
 
         CrashyReporter.getLogsAsStrings()?.asSequence()?.forEach {
             Log.d("CRASHY", "WITH CRASH REASON: \n")

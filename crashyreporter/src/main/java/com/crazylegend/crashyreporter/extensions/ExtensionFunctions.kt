@@ -4,6 +4,7 @@ package com.crazylegend.crashyreporter.extensions
 
 import android.app.ActivityManager
 import android.app.ActivityManager.RunningAppProcessInfo.*
+import android.app.ApplicationExitInfo
 import android.app.ApplicationExitInfo.*
 import android.content.Context
 import android.content.pm.PackageManager
@@ -147,7 +148,7 @@ private fun buildExitReason(reason: Int) = when (reason) {
     REASON_SIGNALED -> "SIGNALED"
     REASON_USER_REQUESTED -> "USER_REQUESTED"
     REASON_USER_STOPPED -> "USER_STOPPED"
-    android.app.ApplicationExitInfo.REASON_UNKNOWN -> "UNKNOWN"
+    ApplicationExitInfo.REASON_UNKNOWN -> "UNKNOWN"
     else -> notAvailableString
 }
 
@@ -268,7 +269,7 @@ internal val Context.shortAppName: String?
     get() = actualPackageName?.substringAfterLast('.')
 
 
-val Context.apkSignatures
+internal val Context.apkSignatures
     get() = currentSignatures.toList()
 
 @Suppress("DEPRECATION", "RemoveExplicitTypeArguments")
@@ -276,12 +277,10 @@ private val Context.currentSignatures: Array<String>
     get() {
         val actualSignatures = ArrayList<String>()
         val signatures = try {
-            val packageInfo =
-                    packageManager.getPackageInfo(
-                            packageName,
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
-                                PackageManager.GET_SIGNING_CERTIFICATES
-                            else PackageManager.GET_SIGNATURES)
+            val packageInfo = packageManager.getPackageInfo(packageName,
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+                        PackageManager.GET_SIGNING_CERTIFICATES
+                    else PackageManager.GET_SIGNATURES)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 if (packageInfo.signingInfo.hasMultipleSigners())
                     packageInfo.signingInfo.apkContentsSigners
@@ -298,4 +297,12 @@ private val Context.currentSignatures: Array<String>
         return actualSignatures.filter { it.isNotEmpty() && it.isNotBlank() }.toTypedArray()
     }
 
+internal fun formatMillisToHoursMinutesSeconds(millis: Long) = String.format("%d hr %d min, %d sec", millis / (1000 * 60 * 60), (millis % (1000 * 60 * 60)) / (1000 * 60), ((millis % (1000 * 60 * 60)) % (1000 * 60)) / 1000)
 
+internal fun <T> List<T>.mapWithNewLine() = mapIndexed { index, t -> if (index == lastIndex) t.toString() else "$t\n" }.toString().replace("[", "").replace("]", "")
+internal fun <T> Array<T>.mapWithNewLine() = mapIndexed { index, t -> if (index == lastIndex) t.toString() else "$t\n" }.toString().replace("[", "").replace("]", "")
+
+internal fun <T> List<T>.mapWithoutNewLine() = map { it.toString() }.toString().replace("[", "").replace("]", "")
+internal fun <T> Array<T>.mapWithoutNewLine() = map { it.toString() }.toString().replace("[", "").replace("]", "")
+
+internal val Context.systemFeatures get() = packageManager.systemAvailableFeatures.mapWithNewLine()
