@@ -60,6 +60,7 @@ object CrashyReporter {
      */
     fun initialize(context: Context) {
         applicationContext = context
+        setupExceptionHandler()
     }
 
 

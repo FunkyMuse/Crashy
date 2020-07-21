@@ -1,16 +1,13 @@
 package com.crazylegend.crashy
 
-import android.app.ActivityManager
-import android.content.Context
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.edit
+import androidx.appcompat.widget.AppCompatButton
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.crazylegend.crashyreporter.CrashyReporter
-import com.crazylegend.crashyreporter.utils.SharedPreferencesUtil
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,27 +23,21 @@ class MainActivity : AppCompatActivity() {
             findViewById<TextView>(R.id.test).apply {
                 text = it
                 movementMethod = ScrollingMovementMethod()
+                setOnClickListener {
+                    val array = arrayOf(1, 2)
+                    array[120]
+                }
             }
             println(it)
         }
 
-        //for testing purposes
-        CrashyReporter.purgeLogs()
-
-        //Crashes and exceptions are also captured from other threads
-        Thread {
-            try {
+        findViewById<AppCompatButton>(R.id.crash).apply {
+            setOnClickListener {
                 val array = arrayOf(1, 2)
                 array[120]
-            } catch (e: Exception) {
-                //log caught Exception
-                CrashyReporter.logException(e)
             }
-        }.start()
-
+        }
     }
 
-    private inline val Context.activityManager: ActivityManager
-        get() = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
 
 }
