@@ -38,9 +38,9 @@ internal object DeviceUtils {
                 "Board: ${Build.BOARD}\n" +
                 "Bootloader: ${Build.BOOTLOADER}\n" +
                 "Brand: ${Build.BRAND}\n" +
-                "CPU_ABIS_32: ${Build.SUPPORTED_32_BIT_ABIS.map { it }.notAvailableIfNull()}\n" +
-                "CPU_ABIS_64: ${Build.SUPPORTED_64_BIT_ABIS.map { it }.notAvailableIfNull()}\n" +
-                "Supported ABIS: ${Build.SUPPORTED_ABIS.map { it }.notAvailableIfNull()}\n" +
+                "CPU_ABIS_32: ${Build.SUPPORTED_32_BIT_ABIS.map { it }.mapWithoutNewLine().notAvailableIfNull()}\n" +
+                "CPU_ABIS_64: ${Build.SUPPORTED_64_BIT_ABIS.map { it }.mapWithoutNewLine().notAvailableIfNull()}\n" +
+                "Supported ABIS: ${Build.SUPPORTED_ABIS.map { it }.mapWithoutNewLine().notAvailableIfNull()}\n" +
                 "Device: ${Build.DEVICE}\n" +
                 "Display: ${Build.DISPLAY}\n" +
                 "Fingerprint: ${Build.FINGERPRINT}\n" +

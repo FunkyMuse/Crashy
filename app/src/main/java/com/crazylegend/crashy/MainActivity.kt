@@ -23,16 +23,14 @@ class MainActivity : AppCompatActivity() {
             findViewById<TextView>(R.id.test).apply {
                 text = it
                 movementMethod = ScrollingMovementMethod()
-                setOnClickListener {
-                    val array = arrayOf(1, 2)
-                    array[120]
-                }
             }
             println(it)
         }
 
         findViewById<AppCompatButton>(R.id.crash).apply {
             setOnClickListener {
+                CrashyReporter.purgeLogs()
+
                 val array = arrayOf(1, 2)
                 array[120]
             }
