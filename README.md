@@ -24,7 +24,7 @@ allprojects {
 ```gradle
 dependencies {
     // androidX startup for auto-init
-    implementation "androidx.startup:startup-runtime:1.0.0-alpha01"
+    implementation "androidx.startup:startup-runtime:1.0.0-alpha02"
 
     //crashy
     implementation 'com.github.CraZyLegenD:Crashy:$version'
