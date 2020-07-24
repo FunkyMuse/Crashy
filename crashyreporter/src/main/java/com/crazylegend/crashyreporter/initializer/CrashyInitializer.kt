@@ -1,7 +1,6 @@
 package com.crazylegend.crashyreporter.initializer
 
 import android.content.Context
-import androidx.annotation.Keep
 import androidx.startup.Initializer
 import com.crazylegend.crashyreporter.CrashyReporter
 
@@ -9,7 +8,6 @@ import com.crazylegend.crashyreporter.CrashyReporter
 /**
  * Created by crazy on 6/18/20 to long live and prosper !
  */
-@Keep
 internal class CrashyInitializer : Initializer<CrashyInitializer.CrashyToken> {
 
     object CrashyToken
