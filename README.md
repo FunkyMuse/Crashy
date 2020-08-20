@@ -21,10 +21,11 @@ allprojects {
 
 2. Add the dependency in the application build.gradle
 
+[Find the latest AndroidX startup version here](https://developer.android.com/jetpack/androidx/releases/startup)
 ```gradle
 dependencies {
-    // androidX startup for auto-init
-    implementation "androidx.startup:startup-runtime:1.0.0-alpha02"
+    // androidX startup for auto-init or find the latest version at the link above
+    implementation "androidx.startup:startup-runtime:1.0.0-alpha03"
 
     //crashy
     implementation 'com.github.CraZyLegenD:Crashy:$version'
