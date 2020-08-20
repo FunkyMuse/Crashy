@@ -2,7 +2,7 @@
 ### A small Android library written entirely in Kotlin to collect crash reports and save them to storage.
 
 [![](https://jitpack.io/v/CraZyLegenD/Crashy.svg)](https://jitpack.io/#CraZyLegenD/Crashy)
- [![Kotlin](https://img.shields.io/badge/Kotlin-1.3.72-blue.svg)](https://kotlinlang.org) [![Platform](https://img.shields.io/badge/Platform-Android-green.svg)](https://developer.android.com/guide/) 
+ [![Kotlin](https://img.shields.io/badge/Kotlin-1.4.0-blue.svg)](https://kotlinlang.org) [![Platform](https://img.shields.io/badge/Platform-Android-green.svg)](https://developer.android.com/guide/) 
 ![API](https://img.shields.io/badge/Min%20API-21-green)
 ![API](https://img.shields.io/badge/Compiled%20API-30-green)
 
