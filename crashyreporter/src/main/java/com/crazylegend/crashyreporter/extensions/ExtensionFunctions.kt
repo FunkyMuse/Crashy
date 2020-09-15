@@ -7,6 +7,7 @@ import android.app.ActivityManager.RunningAppProcessInfo.*
 import android.app.ApplicationExitInfo
 import android.app.ApplicationExitInfo.*
 import android.content.Context
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.content.pm.Signature
 import android.os.BatteryManager
@@ -29,6 +30,7 @@ private inline val Context.batteryManager
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     get() = getSystemService(Context.BATTERY_SERVICE) as BatteryManager
 
+internal val Context.getFirstInstallTime get() = packageManager.getPackageInfo(packageName, 0).firstInstallTime
 
 internal val Context.getBatteryPercentage get() = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
 
@@ -306,3 +308,5 @@ internal fun <T> List<T>.mapWithoutNewLine() = map { it.toString() }.toString().
 internal fun <T> Array<T>.mapWithoutNewLine() = map { it.toString() }.toString().replace("[", "").replace("]", "")
 
 internal val Context.systemFeatures get() = packageManager.systemAvailableFeatures.mapWithNewLine()
+
+internal fun Context.isDebuggable(): Boolean = applicationContext.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0

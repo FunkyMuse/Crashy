@@ -1,7 +1,9 @@
 package com.crazylegend.crashyreporter.utils
 
 import android.content.Context
+import com.crazylegend.crashyreporter.CrashyReporter
 import com.crazylegend.crashyreporter.extensions.*
+import java.util.*
 
 
 /**
@@ -20,6 +22,8 @@ object ApplicationUtils {
                 "Short package name: ${context.shortAppName.notAvailableIfNull()}\n" +
                 "Flavor: ${context.flavor.notAvailableIfNull()}\n" +
                 "Signatures: ${context.apkSignatures.mapWithoutNewLine().notAvailableIfNull()}\n" +
+                "Is debuggable: ${context.isDebuggable().asYesOrNo()}\n" +
+                "First installed: ${CrashyReporter.dateFormat.format(Date(context.getFirstInstallTime))}\n" +
                 "Default prefs: ${SharedPreferencesUtil.collect(context).notAvailableIfNull()}\n" +
                 "\n" +
                 "*********** END of Application info ***********" +
