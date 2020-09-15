@@ -31,6 +31,14 @@ private inline val Context.batteryManager
     get() = getSystemService(Context.BATTERY_SERVICE) as BatteryManager
 
 internal val Context.getFirstInstallTime get() = packageManager.getPackageInfo(packageName, 0).firstInstallTime
+internal val Context.lastUpdateTime get() = packageManager.getPackageInfo(packageName, 0).lastUpdateTime
+internal val Context.requestedPermissions get() = getGrantedPermissions()
+
+private fun Context.getGrantedPermissions(): List<String>? {
+    return tryOrNull {
+        packageManager.getPackageInfo(packageName, PackageManager.GET_PERMISSIONS).requestedPermissions.toList()
+    }
+}
 
 internal val Context.getBatteryPercentage get() = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
 

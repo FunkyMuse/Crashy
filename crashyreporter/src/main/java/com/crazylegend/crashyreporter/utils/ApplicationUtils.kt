@@ -24,6 +24,8 @@ object ApplicationUtils {
                 "Signatures: ${context.apkSignatures.mapWithoutNewLine().notAvailableIfNull()}\n" +
                 "Is debuggable: ${context.isDebuggable().asYesOrNo()}\n" +
                 "First installed: ${CrashyReporter.dateFormat.format(Date(context.getFirstInstallTime))}\n" +
+                "Last updated: ${CrashyReporter.dateFormat.format(Date(context.lastUpdateTime))}\n" +
+                "Requested permissions: ${context.requestedPermissions?.mapWithoutNewLine().notAvailableIfNull()}\n" +
                 "Default prefs: ${SharedPreferencesUtil.collect(context).notAvailableIfNull()}\n" +
                 "\n" +
                 "*********** END of Application info ***********" +
