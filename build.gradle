@@ -30,5 +30,5 @@ ext {
     androidXTestRulesVersion = '1.2.0-beta01'
     robolectricVersion = '4.4'
     archTestingVersion = '2.1.0'
-    startup = '1.0.0-alpha03'
+    startup = '1.0.0-beta01'
 }
