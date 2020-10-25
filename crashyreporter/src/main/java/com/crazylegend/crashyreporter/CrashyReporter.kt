@@ -18,6 +18,13 @@ import java.util.*
  */
 object CrashyReporter {
 
+    /**
+     * Checks what time the library was initialized
+     * -1 if not initialized
+     */
+    var initializeTime: Long = -1
+        private set
+
     private lateinit var applicationContext: Context
 
     //paths
@@ -61,6 +68,7 @@ object CrashyReporter {
     fun initialize(context: Context) {
         applicationContext = context
         setupExceptionHandler()
+        initializeTime = System.currentTimeMillis()
     }
 
 

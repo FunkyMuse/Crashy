@@ -8,7 +8,7 @@ import java.io.IOException
 /**
  * Created by crazy on 7/19/20 to long live and prosper !
  */
-object CPUInfo {
+internal object CPUInfo {
 
     fun getNumberOfCores() = Runtime.getRuntime().availableProcessors()
 

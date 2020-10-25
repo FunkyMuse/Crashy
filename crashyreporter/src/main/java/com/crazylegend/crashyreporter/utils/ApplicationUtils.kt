@@ -10,7 +10,7 @@ import java.util.*
  * Created by crazy on 7/19/20 to long live and prosper !
  */
 
-object ApplicationUtils {
+internal object ApplicationUtils {
 
     internal fun appendApplicationInfo(context: Context): String {
         return "*********** Application info ***********\n" +
@@ -26,6 +26,7 @@ object ApplicationUtils {
                 "First installed: ${CrashyReporter.dateFormat.format(Date(context.getFirstInstallTime))}\n" +
                 "Last updated: ${CrashyReporter.dateFormat.format(Date(context.lastUpdateTime))}\n" +
                 "Requested permissions: ${context.requestedPermissions?.mapWithoutNewLine().notAvailableIfNull()}\n" +
+                "Default prefs: ${SharedPreferencesUtil.collect(context).notAvailableIfNull()}\n" +
                 "Default prefs: ${SharedPreferencesUtil.collect(context).notAvailableIfNull()}\n" +
                 "\n" +
                 "*********** END of Application info ***********" +

@@ -9,7 +9,7 @@ import java.io.InputStreamReader
  * Created by crazy on 2/6/19 to long live and prosper !
  */
 
-object RootUtils {
+internal object RootUtils {
 
     internal val isDeviceRooted: Boolean
         get() = checkRootMethod1() || checkRootMethod2() || checkRootMethod3()
