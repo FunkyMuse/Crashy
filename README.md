@@ -1,7 +1,7 @@
 # Crashy
 ### A small Android library written entirely in Kotlin to collect crash reports and save them to storage.
 
-[![](https://jitpack.io/v/CraZyLegenD/Crashy.svg)](https://jitpack.io/#CraZyLegenD/Crashy)
+[![](https://jitpack.io/v/FunkyMuse/Crashy.svg)](https://jitpack.io/#FunkyMuse/Crashy)
  [![Kotlin](https://img.shields.io/badge/Kotlin-1.4.0-blue.svg)](https://kotlinlang.org) [![Platform](https://img.shields.io/badge/Platform-Android-green.svg)](https://developer.android.com/guide/) 
 ![API](https://img.shields.io/badge/Min%20API-21-green)
 ![API](https://img.shields.io/badge/Compiled%20API-30-green)
@@ -28,7 +28,7 @@ dependencies {
     implementation "androidx.startup:startup-runtime:1.0.0-beta01"
 
     //crashy
-    implementation 'com.github.CraZyLegenD:Crashy:$version'
+    implementation 'com.github.FunkyMuse:Crashy:$version'
   }
 ```
 
@@ -58,9 +58,9 @@ dependencies {
 ```
 
 ## Screens of how the stack trace info looks like
-<img src="https://raw.githubusercontent.com/CraZyLegenD/Crashy/master/screens/screen_1.png" width="33%"></img>
-<img src="https://raw.githubusercontent.com/CraZyLegenD/Crashy/master/screens/screen_2.png" width="33%"></img>
-<img src="https://raw.githubusercontent.com/CraZyLegenD/Crashy/master/screens/screen_3.png" width="33%"></img>
+<img src="https://raw.githubusercontent.com/FunkyMuse/Crashy/master/screens/screen_1.png" width="33%"></img>
+<img src="https://raw.githubusercontent.com/FunkyMuse/Crashy/master/screens/screen_2.png" width="33%"></img>
+<img src="https://raw.githubusercontent.com/FunkyMuse/Crashy/master/screens/screen_3.png" width="33%"></img>
 
 5. How to use?
 
