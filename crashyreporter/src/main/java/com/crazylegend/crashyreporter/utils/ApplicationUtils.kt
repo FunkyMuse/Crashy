@@ -13,24 +13,23 @@ import java.util.*
 internal object ApplicationUtils {
 
     internal fun appendApplicationInfo(context: Context): String {
-        return "*********** Application info ***********\n" +
-                "\n" +
-                "App name: ${context.appName.notAvailableIfNull()}\n" +
-                "Version code: ${context.getVersionCodeCompat()}\n" +
-                "Version name: ${context.getVersionName().notAvailableIfNull()}\n" +
-                "Package name: ${context.applicationInfo.packageName.notAvailableIfNull()}\n" +
-                "Short package name: ${context.shortAppName.notAvailableIfNull()}\n" +
-                "Flavor: ${context.flavor.notAvailableIfNull()}\n" +
-                "Signatures: ${context.apkSignatures.mapWithoutNewLine().notAvailableIfNull()}\n" +
-                "Is debuggable: ${context.isDebuggable().asYesOrNo()}\n" +
-                "First installed: ${CrashyReporter.dateFormat.format(Date(context.getFirstInstallTime))}\n" +
-                "Last updated: ${CrashyReporter.dateFormat.format(Date(context.lastUpdateTime))}\n" +
-                "Requested permissions: ${context.requestedPermissions?.mapWithoutNewLine().notAvailableIfNull()}\n" +
-                "Default prefs: ${SharedPreferencesUtil.collect(context).notAvailableIfNull()}\n" +
-                "Default prefs: ${SharedPreferencesUtil.collect(context).notAvailableIfNull()}\n" +
-                "\n" +
-                "*********** END of Application info ***********" +
-                "\n" +
-                "\n"
+        return "`` Application info ``$NEW_ROW" +
+                NEW_ROW +
+                "App name: ${context.appName.notAvailableIfNull()}$NEW_ROW" +
+                "Version code: ${context.getVersionCodeCompat()}$NEW_ROW" +
+                "Version name: ${context.getVersionName().notAvailableIfNull()}$NEW_ROW" +
+                "Package name: ${context.applicationInfo.packageName.notAvailableIfNull()}$NEW_ROW" +
+                "Short package name: ${context.shortAppName.notAvailableIfNull()}$NEW_ROW" +
+                "Flavor: ${context.flavor.notAvailableIfNull()}$NEW_ROW" +
+                "Signatures: ${context.apkSignatures.joinToString { it }.notAvailableIfNull()}$NEW_ROW" +
+                "Is debuggable: ${context.isDebuggable().asYesOrNo()}$NEW_ROW" +
+                "First installed: ${CrashyReporter.dateFormat.format(Date(context.getFirstInstallTime))}$NEW_ROW" +
+                "Last updated: ${CrashyReporter.dateFormat.format(Date(context.lastUpdateTime))}$NEW_ROW" +
+                "Requested permissions: ${context.requestedPermissions?.joinToString { it.toString() }.notAvailableIfNull()}$NEW_ROW" +
+                "Default prefs: ${SharedPreferencesUtil.collect(context).notAvailableIfNull()}$NEW_ROW" +
+                "Default prefs: ${SharedPreferencesUtil.collect(context).notAvailableIfNull()}$NEW_ROW" +
+                NEW_ROW +
+                "`` END of Application info ``" +
+                NEW_ROW + NEW_ROW
     }
 }

@@ -2,7 +2,7 @@
 ### A small Android library written entirely in Kotlin to collect crash reports and save them to storage.
 
 [![](https://jitpack.io/v/FunkyMuse/Crashy.svg)](https://jitpack.io/#FunkyMuse/Crashy)
- [![Kotlin](https://img.shields.io/badge/Kotlin-1.4.0-blue.svg)](https://kotlinlang.org) [![Platform](https://img.shields.io/badge/Platform-Android-green.svg)](https://developer.android.com/guide/) 
+ [![Kotlin](https://img.shields.io/badge/Kotlin-1.4.30-blue.svg)](https://kotlinlang.org) [![Platform](https://img.shields.io/badge/Platform-Android-green.svg)](https://developer.android.com/guide/)
 ![API](https://img.shields.io/badge/Min%20API-21-green)
 ![API](https://img.shields.io/badge/Compiled%20API-30-green)
 
@@ -25,7 +25,7 @@ allprojects {
 ```gradle
 dependencies {
     // androidX startup for auto-init or find the latest version at the link above
-    implementation "androidx.startup:startup-runtime:1.0.0-beta01"
+    implementation "androidx.startup:startup-runtime:1.0.0"
 
     //crashy
     implementation 'com.github.FunkyMuse:Crashy:$version'

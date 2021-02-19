@@ -2,7 +2,6 @@ package com.crazylegend.crashyreporter.utils
 
 import android.content.Context
 import android.preference.PreferenceManager
-import com.crazylegend.crashyreporter.extensions.mapWithoutNewLine
 
 
 /**
@@ -15,5 +14,5 @@ internal object SharedPreferencesUtil {
                 val key = it.key
                 val value = it.value
                 "$key = $value"
-            }.toList().mapWithoutNewLine()
+            }.toList().joinToString()
 }

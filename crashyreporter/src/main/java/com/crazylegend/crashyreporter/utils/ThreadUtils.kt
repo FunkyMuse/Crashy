@@ -1,6 +1,7 @@
 package com.crazylegend.crashyreporter.utils
 
 import android.os.SystemClock
+import com.crazylegend.crashyreporter.extensions.NEW_ROW
 import com.crazylegend.crashyreporter.extensions.formatMillisToHoursMinutesSeconds
 
 
@@ -10,24 +11,24 @@ import com.crazylegend.crashyreporter.extensions.formatMillisToHoursMinutesSecon
 internal object ThreadUtils {
 
     fun getThreadInfo(thread: Thread) =
-            "``````````` Thread info ```````````\n" +
-                    "\n" +
-                    "Name: ${thread.name}\n" +
-                    "ID: ${thread.id}\n" +
-                    "State: ${thread.state.name}\n" +
-                    "Priority: ${thread.priority}\n" +
-                    "Thread group name: ${thread.threadGroup?.name}\n" +
-                    "Thread group parent: ${thread.threadGroup?.parent?.name}\n" +
-                    "Thread group active count: ${thread.threadGroup?.activeCount()}\n" +
-                    "Thread time: ${formatMillisToHoursMinutesSeconds(SystemClock.currentThreadTimeMillis())}\n" +
-                    "\n" +
-                    "``````````` END of thread info ```````````\n"
+            "`` Thread info ``$NEW_ROW" +
+                    NEW_ROW +
+                    "Name: ${thread.name}$NEW_ROW" +
+                    "ID: ${thread.id}$NEW_ROW" +
+                    "State: ${thread.state.name}$NEW_ROW" +
+                    "Priority: ${thread.priority}$NEW_ROW" +
+                    "Thread group name: ${thread.threadGroup?.name}$NEW_ROW" +
+                    "Thread group parent: ${thread.threadGroup?.parent?.name}$NEW_ROW" +
+                    "Thread group active count: ${thread.threadGroup?.activeCount()}$NEW_ROW" +
+                    "Thread time: ${formatMillisToHoursMinutesSeconds(SystemClock.currentThreadTimeMillis())}$NEW_ROW" +
+                    NEW_ROW +
+                    "`` END of thread info ``$NEW_ROW"
 
 
     fun buildStackTraceString(stackTrace: String) =
-            "----------- Stacktrace -----------\n" +
-                    "\n" +
-                    "$stackTrace\n" +
-                    "\n" +
-                    "----------- END of stacktrace -----------\n"
+            "`` Stacktrace ``$NEW_ROW" +
+                    NEW_ROW +
+                    "$stackTrace$NEW_ROW" +
+                    NEW_ROW +
+                    "`` END of stacktrace ``$NEW_ROW"
 }

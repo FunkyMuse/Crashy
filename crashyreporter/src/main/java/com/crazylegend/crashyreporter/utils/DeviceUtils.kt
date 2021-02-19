@@ -23,61 +23,59 @@ internal object DeviceUtils {
 
     fun getDeviceDetails(context: Context): String {
 
-        return "----------- Device info -----------\n" +
-                "\n" +
+        return "`` Device info ``$NEW_ROW" +
+                NEW_ROW +
                 "Report ID: ${UUID.randomUUID()}" +
-                "\n" +
-                "Device ID: ${getDeviceID(context)}\n" +
-                "Application version: ${getAppVersion(context)}\n" +
-                "Default launcher: ${getLaunchedFromApp(context)}\n" +
-                "Timezone name: ${TimeZone.getDefault().displayName}\n" +
-                "Timezone ID: ${TimeZone.getDefault().id}\n" +
-                "Version release: ${Build.VERSION.RELEASE}\n" +
-                "Version incremental : ${Build.VERSION.INCREMENTAL}\n" +
-                "Version SDK: ${Build.VERSION.SDK_INT}\n" +
-                "Board: ${Build.BOARD}\n" +
-                "Bootloader: ${Build.BOOTLOADER}\n" +
-                "Brand: ${Build.BRAND}\n" +
-                "CPU_ABIS_32: ${Build.SUPPORTED_32_BIT_ABIS.map { it }.mapWithoutNewLine().notAvailableIfNull()}\n" +
-                "CPU_ABIS_64: ${Build.SUPPORTED_64_BIT_ABIS.map { it }.mapWithoutNewLine().notAvailableIfNull()}\n" +
-                "Supported ABIS: ${Build.SUPPORTED_ABIS.map { it }.mapWithoutNewLine().notAvailableIfNull()}\n" +
-                "Device: ${Build.DEVICE}\n" +
-                "Display: ${Build.DISPLAY}\n" +
-                "Fingerprint: ${Build.FINGERPRINT}\n" +
-                "Hardware: ${Build.HARDWARE}\n" +
-                "Host: ${Build.HOST}\n" +
-                "ID: ${Build.ID}\n" +
-                "Manufacturer: ${Build.MANUFACTURER}\n" +
-                "Product: ${Build.PRODUCT}\n" +
-                "Build time: ${Build.TIME}\n" +
-                "Build time formatted: ${CrashyReporter.dateFormat.format(Date(Build.TIME))}\n" +
-                "Type: ${Build.TYPE}\n" +
-                "Radio: ${getRadioVersion()}\n" +
-                "Tags: ${Build.TAGS}\n" +
-                "User: ${Build.USER}\n" +
-                "User IDs: ${getUserPlayIDs(context).notAvailableIfNull()}\n" +
-                "Is sustained performance mode supported: ${context.isSustainedPerformanceModeSupported}\n" +
-                "Is in power save mode: ${context.isInPowerSaveMode}\n" +
-                "Is in interactive state: ${context.isInInteractiveState}\n" +
-                "Is ignoring battery optimizations: ${context.isIgnoringBatteryOptimization}\n" +
-                "Thermal status: ${context.getThermalStatus}\n" +
-                "Location power save mode: ${context.locationPowerSaveMode}\n" +
-                "Is device idle: ${context.isDeviceIdle}\n" +
-                "Battery percentage: ${context.getBatteryPercentage}\n" +
-                "Battery remaining time: ${getChargeRemainingTime(context)}\n" +
-                "Is battery charging: ${context.isBatteryCharging.asYesOrNo()}\n" +
-                "Is device rooted: ${RootUtils.isDeviceRooted.asYesOrNo()}\n" +
-                "CPU Model: ${CPUInfo.getCPUModel().notAvailableIfNull()}\n" +
-                "# of CPU cores: ${CPUInfo.getNumberOfCores()}\n" +
-                "Up time with sleep: ${upTimeWithSleep()}\n" +
-                "Up time without sleep: ${upTimeWithoutSleep()}\n" +
-                "\n" +
-                "----------- END of Device info -----------" +
-                "\n" +
-                "\n" +
+                NEW_ROW +
+                "Device ID: ${getDeviceID(context)}$NEW_ROW" +
+                "Application version: ${getAppVersion(context)}$NEW_ROW" +
+                "Default launcher: ${getLaunchedFromApp(context)}$NEW_ROW" +
+                "Timezone name: ${TimeZone.getDefault().displayName}$NEW_ROW" +
+                "Timezone ID: ${TimeZone.getDefault().id}$NEW_ROW" +
+                "Version release: ${Build.VERSION.RELEASE}$NEW_ROW" +
+                "Version incremental : ${Build.VERSION.INCREMENTAL}$NEW_ROW" +
+                "Version SDK: ${Build.VERSION.SDK_INT}$NEW_ROW" +
+                "Board: ${Build.BOARD}$NEW_ROW" +
+                "Bootloader: ${Build.BOOTLOADER}$NEW_ROW" +
+                "Brand: ${Build.BRAND}$NEW_ROW" +
+                "CPU ABIS 32: ${Build.SUPPORTED_32_BIT_ABIS.joinToString { it }.notAvailableIfNull()}$NEW_ROW" +
+                "CPU ABIS 64: ${Build.SUPPORTED_64_BIT_ABIS.joinToString { it }.notAvailableIfNull()}$NEW_ROW" +
+                "Supported ABIS: ${Build.SUPPORTED_ABIS.joinToString { it }.notAvailableIfNull()}$NEW_ROW" +
+                "Device: ${Build.DEVICE}$NEW_ROW" +
+                "Display: ${Build.DISPLAY}$NEW_ROW" +
+                "Fingerprint: ${Build.FINGERPRINT}$NEW_ROW" +
+                "Hardware: ${Build.HARDWARE}$NEW_ROW" +
+                "Host: ${Build.HOST}$NEW_ROW" +
+                "ID: ${Build.ID}$NEW_ROW" +
+                "Manufacturer: ${Build.MANUFACTURER}$NEW_ROW" +
+                "Product: ${Build.PRODUCT}$NEW_ROW" +
+                "Build time: ${Build.TIME}$NEW_ROW" +
+                "Build time formatted: ${CrashyReporter.dateFormat.format(Date(Build.TIME))}$NEW_ROW" +
+                "Type: ${Build.TYPE}$NEW_ROW" +
+                "Radio: ${getRadioVersion()}$NEW_ROW" +
+                "Tags: ${Build.TAGS}$NEW_ROW" +
+                "User: ${Build.USER}$NEW_ROW" +
+                "User IDs: ${getUserPlayIDs(context).notAvailableIfNull()}$NEW_ROW" +
+                "Is sustained performance mode supported: ${context.isSustainedPerformanceModeSupported}$NEW_ROW" +
+                "Is in power save mode: ${context.isInPowerSaveMode}$NEW_ROW" +
+                "Is in interactive state: ${context.isInInteractiveState}$NEW_ROW" +
+                "Is ignoring battery optimizations: ${context.isIgnoringBatteryOptimization}$NEW_ROW" +
+                "Thermal status: ${context.getThermalStatus}$NEW_ROW" +
+                "Location power save mode: ${context.locationPowerSaveMode}$NEW_ROW" +
+                "Is device idle: ${context.isDeviceIdle}$NEW_ROW" +
+                "Battery percentage: ${context.getBatteryPercentage}$NEW_ROW" +
+                "Battery remaining time: ${getChargeRemainingTime(context)}$NEW_ROW" +
+                "Is battery charging: ${context.isBatteryCharging.asYesOrNo()}$NEW_ROW" +
+                "Is device rooted: ${RootUtils.isDeviceRooted.asYesOrNo()}$NEW_ROW" +
+                "CPU Model: ${CPUInfo.getCPUModel().notAvailableIfNull()}$NEW_ROW" +
+                "Number of CPU cores: ${CPUInfo.getNumberOfCores()}$NEW_ROW" +
+                "Up time with sleep: ${upTimeWithSleep()}$NEW_ROW" +
+                "Up time without sleep: ${upTimeWithoutSleep()}$NEW_ROW" +
+                NEW_ROW +
+                "`` END of Device info ``" +
+                NEW_ROW + NEW_ROW +
                 appendExitReasons(context) +
-                "\n" +
-                "\n" +
+                NEW_ROW + NEW_ROW +
                 appendApplicationInfo(context)
     }
 
@@ -96,9 +94,10 @@ internal object DeviceUtils {
 
 
     private fun appendExitReasons(context: Context): String {
-        return "########### Exit reasons ###########\n" +
-                "${context.getExitReasons(maxRes = 3).notAvailableIfNullNewLine().replace("[", "").replace("]", "").replace(",", "\n")}\n" +
-                "########### END of exit reasons ###########"
+        return "`` Exit reasons ``$NEW_ROW" + NEW_ROW +
+                "${context.getExitReasons(maxRes = 3).notAvailableIfNullNewLine().replace("[", "").replace("]", "").replace(",", NEW_ROW)}$NEW_ROW" +
+                NEW_ROW +
+                "`` END of exit reasons ``"
     }
 
 
@@ -151,11 +150,11 @@ internal object DeviceUtils {
 
 
     fun getRunningProcesses(context: Context) =
-            "^^^^^^^^^^^ Currently running foreground/background processes ^^^^^^^^^^^\n" +
-                    "\n" +
-                    "${context.getRunningProcesses()}\n" +
-                    "\n" +
-                    "^^^^^^^^^^^ END of running foreground/background processes info ^^^^^^^^^^^"
+            "`` Currently running foreground/background processes ``$NEW_ROW" +
+                    NEW_ROW +
+                    "${context.getRunningProcesses()}$NEW_ROW" +
+                    NEW_ROW +
+                    "`` END of running foreground/background processes info ``"
 
 
 }

@@ -36,7 +36,7 @@ internal val Context.requestedPermissions get() = tryOrNull {
     packageManager.getPackageInfo(packageName, PackageManager.GET_PERMISSIONS).requestedPermissions.toList()
 }
 
-
+internal const val NEW_ROW = "\n"
 internal val Context.getBatteryPercentage get() = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
 
 internal val Context.isBatteryCharging
@@ -163,16 +163,13 @@ internal fun Context.getExitReasons(pid: Int = 0, maxRes: Int = 1) =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             activityManager.getHistoricalProcessExitReasons(packageName, pid, maxRes)
                     .mapIndexed { index, it ->
-                        "~~~~~~~~~~~ Exit reason #${index + 1} ~~~~~~~~~~~\n" +
-                                "\n" +
-                                "Description: ${it.description}\n" +
-                                "Importance: ${buildImportance(it.importance)}\n" +
-                                "Reason: ${buildExitReason(it.reason)}\n" +
-                                "Timestamp: ${CrashyReporter.dateFormat.format(Date(it.timestamp))}\n" +
-                                "\n" +
-                                "~~~~~~~~~~~ END of exit reason #${index + 1} ~~~~~~~~~~~" +
-                                "\n" +
-                                "\n"
+                        "`` Exit reason #${index + 1} ``$NEW_ROW" +
+                                "Description: ${it.description}$NEW_ROW" +
+                                "Importance: ${buildImportance(it.importance)}$NEW_ROW" +
+                                "Reason: ${buildExitReason(it.reason)}$NEW_ROW" +
+                                "Timestamp: ${CrashyReporter.dateFormat.format(Date(it.timestamp))}$NEW_ROW" +
+                                "`` END of exit reason #${index + 1} ``" +
+                                NEW_ROW
                     }
         } else {
             emptyList()
@@ -196,7 +193,7 @@ internal fun Context.getRunningProcesses() =
             activityManager.getRunningServices(Integer.MAX_VALUE).map {
                 it.service.className
             }
-        }.notAvailableIfNullNewLine().replace("[", "").replace("]", "").replace(",", "\n")
+        }.notAvailableIfNullNewLine().replace("[", "").replace("]", "").replace(",", "$NEW_ROW")
 
 internal fun buildImportance(importance: Int): String {
     return when (importance) {
@@ -218,7 +215,7 @@ internal const val notAvailableString = "N/A"
 internal fun String?.notAvailableIfNull() = if (this.isNullOrEmpty()) notAvailableString else this
 
 internal fun <T> Collection<T>?.notAvailableIfNullNewLine(): String =
-        if (this.isNullOrEmpty()) "N/A" else "\n${this}"
+        if (this.isNullOrEmpty()) "N/A" else "$NEW_ROW${this}"
 
 internal fun <T> Collection<T>?.notAvailableIfNull(): String =
         if (this.isNullOrEmpty()) "N/A" else "$this"
@@ -230,7 +227,7 @@ internal val Context.actualPackageName: String?
 internal val Context.flavor: String?
     get() = getBuildConfigValue(actualPackageName, "FLAVOR") as String?
 
-internal val Context.appName: String?
+internal val Context.appName: String
     get() {
         val applicationInfo = applicationContext.applicationInfo
         val stringId = applicationInfo.labelRes
@@ -306,12 +303,6 @@ private val Context.currentSignatures: Array<String>
 
 internal fun formatMillisToHoursMinutesSeconds(millis: Long) = String.format("%d hr %d min, %d sec", millis / (1000 * 60 * 60), (millis % (1000 * 60 * 60)) / (1000 * 60), ((millis % (1000 * 60 * 60)) % (1000 * 60)) / 1000)
 
-internal fun <T> List<T>.mapWithNewLine() = mapIndexed { index, t -> if (index == lastIndex) t.toString() else "$t\n" }.toString().replace("[", "").replace("]", "")
-internal fun <T> Array<T>.mapWithNewLine() = mapIndexed { index, t -> if (index == lastIndex) t.toString() else "$t\n" }.toString().replace("[", "").replace("]", "")
-
-internal fun <T> List<T>.mapWithoutNewLine() = map { it.toString() }.toString().replace("[", "").replace("]", "")
-internal fun <T> Array<T>.mapWithoutNewLine() = map { it.toString() }.toString().replace("[", "").replace("]", "")
-
-internal val Context.systemFeatures get() = packageManager.systemAvailableFeatures.mapWithNewLine()
+internal val Context.systemFeatures get() = packageManager.systemAvailableFeatures.joinToString { it.toString() }
 
 internal fun Context.isDebuggable(): Boolean = applicationContext.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0
