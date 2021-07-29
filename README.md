@@ -21,12 +21,8 @@ allprojects {
 
 2. Add the dependency in the application build.gradle
 
-[Find the latest AndroidX startup version here](https://developer.android.com/jetpack/androidx/releases/startup)
 ```gradle
 dependencies {
-    // androidX startup for auto-init or find the latest version at the link above
-    implementation "androidx.startup:startup-runtime:1.0.0"
-
     //crashy
     implementation 'com.github.FunkyMuse:Crashy:$version'
   }
@@ -36,12 +32,12 @@ dependencies {
 
 ```gradle
    compileOptions {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
+        sourceCompatibility = 11
+        targetCompatibility = 11
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
 ```
 4. Inside your AndroidManifest.xml file

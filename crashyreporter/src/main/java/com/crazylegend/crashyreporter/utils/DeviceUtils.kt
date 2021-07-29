@@ -125,6 +125,7 @@ internal object DeviceUtils {
         null
     }
 
+    @SuppressLint("HardwareIds")
     private fun getDeviceID(context: Context): String? = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
     private fun getAppVersion(context: Context) = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
         context.packageManager.getPackageInfo(context.packageName, 0).longVersionCode
